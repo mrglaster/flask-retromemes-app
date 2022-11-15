@@ -13,6 +13,7 @@ def upload_meme():
 
 #The feed page
 @app.route("/feed", methods=['GET', 'POST'])
+@app.route("/index", methods=['GET', 'POST'])
 def show_feed():
 	return "<h1>Welcome to da feed page!</h1>"
 
