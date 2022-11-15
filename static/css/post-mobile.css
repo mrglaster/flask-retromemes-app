@@ -1,0 +1,36 @@
+@media (max-width: 640px) {
+    main {
+        margin: 0 15px;
+        grid-template-columns: repeat(6, 1fr);
+    }
+        
+    main > h1:first-of-type {
+        grid-column: 2/6;
+        font-size: 14pt;
+    }
+    
+    main > form {
+        grid-column: 1/7;
+        grid-template-columns: repeat(6, 1fr);
+    }
+    
+    form > div {
+        grid-column: 1/4;
+    }
+    
+    form > textarea {
+        resize: none;
+    }
+    
+    form > textarea, input:not(:last-of-type) {
+        grid-column: 4/6;
+    }
+    
+    form > input:last-of-type {
+        grid-column: 3/5;
+    }
+    
+    form > div:nth-of-type(2), form > input {
+        margin-top: 30px;
+    }
+}
