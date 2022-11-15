@@ -2,35 +2,18 @@ from flask import Flask, render_template
 from flask import flash, request, redirect, url_for
 import random, os
 
-app = Flask(__name__)
+#Register page
+@app.route("/register", methods=['POST', 'GET'])
+def register_user():
+	return "<h2>Welcome to register page!</h2>"
 
-@app.route("/")
-def hello_world():
-	return "<p>Hello world!</p>"
+#Login page
+@app.route("/login", methods=['POST', 'GET'])
+@app.route("/auth", methods=['POST', 'GET'])
+@app.route("/authorize", methods=['POST', 'GET'])
+def login_user():
+	return "<h2> Welcome to the  login page </h2>"
 
-app.config['UPLOAD_FOLDER'] = 'C:/'
-@app.route('/upload/', methods=['GET', 'POST'])
-def upload_file():
-    print(request)
-    if request.method == 'POST':
-        # check if the post request has the file part
-
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file:
-            filename = file.filename
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
-    return render_template('upload.html', )
-
-
+#Programm run
 if __name__=='__main__':
 	app.run(host="0.0.0.0")
