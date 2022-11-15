@@ -1,7 +1,9 @@
 from flask import Flask
 from flask import redirect
+from flask import render_template
+from os import getcwd
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 CURRENT_ADDRESS = "http://127.0.0.1:5000/"
 
@@ -13,18 +15,16 @@ def upload_meme():
 
 #The feed page
 @app.route("/feed", methods=['GET', 'POST'])
-@app.route("/index", methods=['GET', 'POST'])
 def show_feed():
 	return "<h1>Welcome to da feed page!</h1>"
 
 #Handling of 404 error
 @app.errorhandler(404)
 def page_notexist(e):
-	return "<h1>Yo nigga, diz page doznt exitst, go to da feed page or ozer crap, hier ya won't find anysing</h1>"
+	return render_template('404.html')
 
 #Register page
 @app.route("/register", methods=['POST', 'GET'])
-@app.route("/newuser", methods=['POST', 'GET'])
 def register_user():
 	return "<h2>Welcome to register page!</h2>"
 
@@ -33,7 +33,7 @@ def register_user():
 @app.route("/auth", methods=['POST', 'GET'])
 @app.route("/authorize", methods=['POST', 'GET'])
 def login_user():
-	return "<h1> Welcome to authorisation page!</h1>"
+	return "<h2> Welcome to the  login page </h2>"
 
 #Programm run
 if __name__=='__main__':
