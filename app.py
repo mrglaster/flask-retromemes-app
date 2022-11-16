@@ -10,8 +10,9 @@ CURRENT_ADDRESS = "http://127.0.0.1:5000/"
 
 #The page for meme uploading
 @app.route("/uploads",methods=['GET','POST'])
+@app.route("/upload", methods=['GET', 'POST'])
 def upload_meme():
-	return "<h> Welcome to meme uploads page! There is nothing here yet, but soon it will be a cool webpage where you'll can upload new memes! </h>"
+	return render_template('upload.html')
 
 #The feed page
 @app.route("/feed", methods=['GET', 'POST'])
