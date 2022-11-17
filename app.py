@@ -26,6 +26,7 @@ def page_notexist(e):
 
 #Register page
 @app.route("/register", methods=['POST', 'GET'])
+@app.route("/signup", methods=['POST', 'GET'])
 def register_user():
 	return "<h2>Welcome to register page!</h2>"
 
