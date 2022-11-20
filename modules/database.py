@@ -145,6 +145,26 @@ def get_all_tabledata(connection, table_name, result_as_dataclass=False):
     return dataclass_result
 
 
+def array_toDataclass(array, table_name):
+    """Transforms bunch of table rows to concisting dataclasses"""
+    if len(array) == 0:
+        raise ValueError("Expected array with length > 0 ")
+    result = []
+    for i in array:
+        print(table_name)
+        result.append(_process_table_rowdata(table_name, i))
+    return result
+
+
+def get_latest_rows(connection, table_name, rows_amount, result_as_dataclass=False):
+    """Returns latesn n rows of a table"""
+    if rows_amount <= 0:
+        raise ValueError("Wrong requested posts amount: expeced positive number")
+    data = connection.cursor().execute(f"SELECT * FROM ( SELECT * FROM {table_name} ORDER BY id DESC LIMIT {rows_amount})").fetchall()
+    if not result_as_dataclass:
+        return data
+    return array_toDataclass(data, table_name)
+
 
 
 def print_table(connection, table_name):
@@ -178,6 +198,18 @@ def test_use_adddata():
     add_data(connection=connection, tablename='users', field_names=fieldnames, dataclass_element=testuser,
              individual_fields=bools)
     print_table(connection=connection, table_name='users')
+
+    
+    
+def get_latest_users_demo():
+    connection = create_connection("C:\\Users\\Glaster\\Desktop\\flask-retromemes-app-main\\database\\memes.db")
+    fieldnames = ('id', 'login', 'password', 'avatar', 'email')
+    bools = [True, True, False, False, True]
+    for i in range(10):
+        testuser = User(1, f"AdminsMom22{i}", "test", "yrs", f"blablabla{i}@mail.ru")
+        add_data(connection=connection, tablename='users', field_names=fieldnames, dataclass_element=testuser, individual_fields=bools)
+    print(get_latest_rows(connection, 'users', 10))
+    clear_table(connection, 'users')
 
 
 test_use_getdata()
