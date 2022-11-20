@@ -1,0 +1,20 @@
+@media (max-width: 640px) {
+    main {
+        margin: 0 15px;
+        grid-template-columns: repeat(6, 1fr);
+    }
+    
+    main > div {
+        grid-column: 2/6;
+        padding: 5px 10px;
+        font-size: 10pt;
+    }
+
+    main > div h3 {
+        font-size: 14pt;
+    }
+
+    input[type="text"], input[type="password"] {
+        width: 100%;
+    }
+}

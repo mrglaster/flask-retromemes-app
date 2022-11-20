@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка поста</title>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/post.css')}}"> -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css')}}"> -->
+    <link rel="stylesheet" href="../static/styles/register.css">
+    <link rel="stylesheet" href="../static/styles/nav.css">
+    <link rel="stylesheet" href="../static/styles/register-mobile.css">
+    <link rel="stylesheet" href="../static/styles/nav-mobile.css"> 
+</head>
+<body>
+    <nav>
+            <a href="#"><div>Feed</div></a>
+            <a href="#"><div>Post</div></a>
+            <a href="#"><div>My memes</div></a>
+    </nav>
+
+    <main>
+        <div>
+            <h3>Sign up</h3>
+            <form action="" method="POST">
+                <table>
+                    <tr>
+                        <td>Login</td>
+                        <td>
+                            <input type="text" name="login" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td>
+                            <input type="password" name="password" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Avatar</td>
+                        <td>
+                            <input type="file" name="avatar">
+                        </td>
+                    </tr>
+                </table>
+                <input type="submit">
+            </form>
+        </div>
+    </main>
+</body>
+</html>
