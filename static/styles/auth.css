@@ -32,6 +32,11 @@ form {
     text-align: center;
 }
 
+form a {
+    text-decoration: none;
+    color: #8FC2E9;
+}
+
 main > div > h3 {
     text-align: center;
 }

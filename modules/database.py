@@ -29,10 +29,10 @@ def create_connection(db_file):
     :return: Connection object or None
     """
     conn = None
-    try:
-        conn = sl.connect(db_file)
-    except Error as e:
-        print(e)
+    # try:
+    conn = sl.connect(db_file)
+    # except Error as e:
+    #     print(e)
     return conn
 
 
@@ -54,7 +54,7 @@ def _process_tuple(working_tuple):
 def delete_row_bId(connection, table_name, row):
     """Deletes row in some table by row's id"""
     sql_request = f'DELETE FROM {table_name} WHERE id={row}'
-    cur = conn.cursor()
+    cur = connection.cursor()
     cur.execute(sql_request)
     connection.commit()
 
@@ -160,13 +160,13 @@ def print_table(connection, table_name):
 
 
 def test_use_getdata():
-    connection = create_connection("C:\\Users\\Glaster\\Desktop\\flask-retromemes-app-main\\database\\memes.db")
+    connection = create_connection("C:\\Users\\79246\\Desktop\\flask-retromemes-app\\database\\memes.db")
     array_classes = get_all_tabledata(connection, 'post', True)
     print(array_classes)
 
 
 def test_use_adddata():
-    connection = create_connection("C:\\Users\\Glaster\\Desktop\\flask-retromemes-app-main\\database\\memes.db")
+    connection = create_connection("C:\\Users\\79246\\Desktop\\flask-retromemes-app\\database\\memes.db")
     clear_table(connection, 'users')
     fieldnames = ('id', 'login', 'password', 'avatar', 'email')
     bools = [True, True, False, False, True]
