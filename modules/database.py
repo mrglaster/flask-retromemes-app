@@ -199,6 +199,18 @@ def test_use_adddata():
              individual_fields=bools)
     print_table(connection=connection, table_name='users')
 
+    
+    
+def get_latest_users_demo():
+    connection = create_connection("C:\\Users\\Glaster\\Desktop\\flask-retromemes-app-main\\database\\memes.db")
+    fieldnames = ('id', 'login', 'password', 'avatar', 'email')
+    bools = [True, True, False, False, True]
+    for i in range(10):
+        testuser = User(1, f"AdminsMom22{i}", "test", "yrs", f"blablabla{i}@mail.ru")
+        add_data(connection=connection, tablename='users', field_names=fieldnames, dataclass_element=testuser, individual_fields=bools)
+    print(get_latest_rows(connection, 'users', 10))
+    clear_table(connection, 'users')
+
 
 test_use_getdata()
 test_use_adddata()
