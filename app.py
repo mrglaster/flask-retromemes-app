@@ -2,6 +2,8 @@ from flask import Flask, flash, request, redirect, url_for, session, render_temp
 from werkzeug.utils import secure_filename
 import os
 
+from modules.dummies import generate_dummypage
+
 app = Flask(__name__, template_folder='templates')
 
 CURRENT_ADDRESS = "http://127.0.0.1:5000/"
@@ -41,7 +43,7 @@ def upload_meme():
 #The feed page
 @app.route("/feed", methods=['GET', 'POST'])
 def show_feed():
-	return "<h1>Welcome to da feed page!</h1>"
+	return
 
 #Handling of 404 error
 @app.errorhandler(404)
@@ -52,13 +54,14 @@ def page_notexist(e):
 @app.route("/register", methods=['POST', 'GET'])
 @app.route("/signup", methods=['POST', 'GET'])
 def register_user():
-	return "<h2>Welcome to register page!</h2>"
+	return generate_dummypage("register")
 
 #Login page
 @app.route("/login", methods=['POST', 'GET'])
 @app.route("/auth", methods=['POST', 'GET'])
 @app.route("/authorize", methods=['POST', 'GET'])
 def login_user():
+<<<<<<< HEAD
 	if request.method == 'POST':
 		login = request.
 		# if user does not select file, browser also
@@ -72,6 +75,9 @@ def login_user():
 			return redirect(url_for('uploaded_file',
 									filename=filename))
 	return render_template("auth.html")
+=======
+	return generate_dummypage("login")
+>>>>>>> 78801c826430937c903cc04e3e7cb8a67e326275
 
 #Programm run
 if __name__=='__main__':
