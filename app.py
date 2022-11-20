@@ -1,17 +1,41 @@
-from flask import Flask
-from flask import redirect
-from flask import render_template
-from os import getcwd
+from flask import Flask, flash, request, redirect, url_for, session, render_template
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__, template_folder='templates')
 
 CURRENT_ADDRESS = "http://127.0.0.1:5000/"
+UPLOAD_FOLDER = '/path/to/the/uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SECRET_KEY'] = 'a03cb5d6aa4399201f230dedcbbb3ed8bec0018d19db9521415b547a'
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #The page for meme uploading
 @app.route("/uploads",methods=['GET','POST'])
 @app.route("/upload", methods=['GET', 'POST'])
 def upload_meme():
+	if not 'logged' in session:
+		return redirect(url_for('login_user'))
+	if request.method == 'POST':
+		# check if the post request has the file part
+		if 'file' not in request.files:
+			flash('No file part')
+			return redirect(request.url)
+		file = request.files['file']
+		# if user does not select file, browser also
+		# submit an empty part without filename
+		if file.filename == '':
+			flash('No selected file')
+			return redirect(request.url)
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			return redirect(url_for('uploaded_file',
+									filename=filename))
 	return render_template('upload.html')
 
 #The feed page
@@ -35,7 +59,19 @@ def register_user():
 @app.route("/auth", methods=['POST', 'GET'])
 @app.route("/authorize", methods=['POST', 'GET'])
 def login_user():
-	return "<h2> Welcome to the  login page </h2>"
+	if request.method == 'POST':
+		login = request.
+		# if user does not select file, browser also
+		# submit an empty part without filename
+		if file.filename == '':
+			flash('No selected file')
+			return redirect(request.url)
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			return redirect(url_for('uploaded_file',
+									filename=filename))
+	return render_template("auth.html")
 
 #Programm run
 if __name__=='__main__':
