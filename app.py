@@ -9,8 +9,13 @@ from modules.dummies import generate_dummypage
 app = Flask(__name__, template_folder='templates')
 
 CURRENT_ADDRESS = "http://127.0.0.1:5000/"
+DATABASE_PATH = 'C:\\Users\\79246\\Desktop\\flask-retromemes-app\\database\\memes.db'
 UPLOAD_FOLDER = "C:\\Users\\79246\\Desktop\\flask-retromemes-app\\static\\images"
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+DEFAULT_AVATAR = "C:\\Users\\79246\\Desktop\\flask-retromemes-app\\static\\images\\ava.jpg"
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'a03cb5d6aa4399201f230dedcbbb3ed8bec0018d19db9521415b547a'
 
@@ -62,12 +67,12 @@ def register_user():
 			file = request.files['file']
 		path = ''
 		if file == '':
-			path = "C:\\Users\\79246\\Desktop\\flask-retromemes-app\\static\\images\\ava.jpg"
+			path = DEFAULT_AVATAR
 		elif allowed_file(file.filename):
 			filename = secure_filename(file.filename)
 			path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 			file.save(path)
-		con = sl.connect('C:\\Users\\79246\\Desktop\\flask-retromemes-app\\database\\memes.db')
+		con = sl.connect(DATABASE_PATH)
 		sql = f"INSERT INTO users(login, password, avatar) values('{login}','{password}', '{path}')"
 		con.execute(sql)
 		session['login'] = login
@@ -84,7 +89,7 @@ def login_user():
 	if request.method == 'POST':
 		login = request.form.get('login')
 		password = request.form.get('password')
-		con = sl.connect('C:\\Users\\79246\\Desktop\\flask-retromemes-app\\database\\memes.db')
+		con = sl.connect(DATABASE_PATH)
 		sql = f"SELECT password,id FROM users WHERE `login`='{login}'"
 		result = list(con.execute(sql))
 		if password == result[0][0]:
