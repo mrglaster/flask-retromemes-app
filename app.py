@@ -2,29 +2,32 @@ from flask import Flask, flash, request, redirect, url_for, session, render_temp
 from werkzeug.utils import secure_filename
 import os
 import sqlite3 as sl
-
+import sys
 from modules.dummies import generate_dummypage
+from modules.database import *
+
 # from modules.database import get_table_column, create_connection
 
 app = Flask(__name__, template_folder='templates')
 
 CURRENT_ADDRESS = "http://127.0.0.1:5000/"
-DATABASE_PATH = 'C:\\Users\\79246\\Desktop\\flask-retromemes-app\\database\\memes.db'
-UPLOAD_FOLDER = "C:\\Users\\79246\\Desktop\\flask-retromemes-app\\static\\images"
-DEFAULT_AVATAR = "C:\\Users\\79246\\Desktop\\flask-retromemes-app\\static\\images\\ava.jpg"
+DATABASE_PATH = os.getcwd() + '\\' + "database" + '\\' + "memes.db"
+UPLOAD_FOLDER = os.getcwd() + '\\' + "static\\images\\uploaded_memes\\"
+DEFAULT_AVATAR = os.getcwd() + "\\static\\images\\ava.png"
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'a03cb5d6aa4399201f230dedcbbb3ed8bec0018d19db9521415b547a'
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-#The page for meme uploading
-@app.route("/uploads",methods=['GET','POST'])
+def allowed_file(filename):
+	return '.' in filename and \
+		   filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# The page for meme uploading
+@app.route("/uploads", methods=['GET', 'POST'])
 @app.route("/upload", methods=['GET', 'POST'])
 def upload_meme():
 	if 'login' not in session:
@@ -35,6 +38,7 @@ def upload_meme():
 			file = request.files['file']
 			# if user does not select file, browser also
 			# submit an empty part without filename
+
 			if file.filename != '' and allowed_file(file.filename):
 				filename = secure_filename(file.filename)
 				print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -42,17 +46,23 @@ def upload_meme():
 				return redirect(url_for('show_feed'))
 	return render_template('upload.html')
 
-#The feed page
+
+# The feed page
+@app.route('/')
 @app.route("/feed", methods=['GET', 'POST'])
+@app.route("/index", methods=['GET', 'POST'])
+@app.route("/main", methods=['GET', 'POST'])
 def show_feed():
 	return render_template("index.html")
 
-#Handling of 404 error
+
+# Handling of 404 error
 @app.errorhandler(404)
 def page_notexist(e):
 	return render_template('404.html')
 
-#Register page
+
+# Register page
 @app.route("/register", methods=['POST', 'GET'])
 @app.route("/signup", methods=['POST', 'GET'])
 def register_user():
@@ -61,7 +71,7 @@ def register_user():
 	if request.method == 'POST':
 		login = request.form.get('login')
 		password = request.form.get('password')
-		email = request.form.get('email')
+		#email = request.form.get('email')
 		file = ''
 		if 'file' in request.files:
 			file = request.files['file']
@@ -73,18 +83,19 @@ def register_user():
 			path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 			file.save(path)
 		con = sl.connect(DATABASE_PATH)
-		sql = f"INSERT INTO users(login, password, avatar) values('{login}','{password}', '{path}')"
-		con.execute(sql)
+		email = f"user_email_{login}{path}@mail.ru"
+		val = add_data(connection=con, tablename='users', dataclass_element=User(0, 0, login, password, path, email), individual_fields=USERS_INDIVIDUAL_FIELDS)
 		session['login'] = login
 	return render_template('register.html')
 
-#Login page
+
+# Login page
 @app.route("/login", methods=['POST', 'GET'])
 @app.route("/auth", methods=['POST', 'GET'])
 @app.route("/authorize", methods=['POST', 'GET'])
 def login_user():
 	if 'login' in session:
-		del session['login'] # TODO delete that later
+		del session['login']  # TODO delete that later
 		return redirect(url_for('show_feed'))
 	if request.method == 'POST':
 		login = request.form.get('login')
@@ -97,6 +108,7 @@ def login_user():
 			session['id'] = result[0][1]
 	return render_template('auth.html')
 
-#Programm run
-if __name__=='__main__':
+
+# Programm run
+if __name__ == '__main__':
 	app.run(host="0.0.0.0")
