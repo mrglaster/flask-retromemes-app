@@ -4,6 +4,7 @@ from modules.users import User
 from modules.posts import Post
 from modules.rates import Rates
 from dataclasses import astuple
+from modules.constants import *
 
 
 def get_rowcount(connection, tablename):
@@ -51,11 +52,19 @@ def _process_tuple(working_tuple):
     return result_string[:-2] + ')'
 
 
-def delete_row_bId(connection, table_name, row):
+def delete_row_bId(connection, table_name, row, idname='id'):
     """Deletes row in some table by row's id"""
     sql_request = f'DELETE FROM {table_name} WHERE id={row}'
     cur = connection.cursor()
     cur.execute(sql_request)
+    """
+    temp_table_name = f'temp_{table_name}_{idname}'
+    connection.execute(f'create temp table {temp_table_name} as select * from {table_name} order by id')
+    connection.execute(f'drop table {table_name}')
+    connection.execute(modules.constants.SQL_GENERATORS_CONTAINERS[table_name])
+    connection.execute(f'insert into {table_name}   select * from {temp_table_name} order by {idname}')
+    connection.execute(f'drop table {temp_table_name}')
+    """
     connection.commit()
 
 
@@ -89,16 +98,16 @@ def is_value_used(connection, table_name, column_name, value):
     return False
 
 
-def add_data(connection, tablename, field_names, dataclass_element, individual_fields=None):
+def add_data(connection, tablename, dataclass_element, individual_fields=None):
     """Appends data to table.
     @:param connection: sqlite.connection object
     @:param tablename: name of the table to which we'll put the data
-    @:param field_names: tuple of table headers. example: a = ('id', 'login', 'password', 'avatar', 'email')
     @:param dataclass_element: data class object which we'll put into the table
     @:param individual_field : array of booleans, containing information about,
     that data in some field must be individual and may not be repeated in the table (for E-mails, logins etc).
     Example: [True, False, True]
     """
+    field_names = FIELDS_CONTAINER[tablename]
     if individual_fields is not None and len(individual_fields) != len(field_names):
         raise ValueError(
             f"Amounts of elements in individual_fields and field_names don't concide: {len(individual_fields)} and {len(field_names)}")
@@ -122,11 +131,11 @@ def add_data(connection, tablename, field_names, dataclass_element, individual_f
 def _process_table_rowdata(table_name, data):
     """Processes table row as object of dataclass"""
     if table_name == 'users':
-        a, b, c, d, e = data
-        return User(a, b, c, d, e)
+        a, f, b, c, d, e = data
+        return User(a, f, b, c, d, e)
     if table_name == 'post':
-        a, b, c, d, e, f = data()
-        return Post(a, b, c, d, e, f)
+        a, b, c, d, e, f, g = data
+        return Post(a, b, c, d, e, f, g)
     if table_name == 'rates':
         a, b, c = data
         return Rates(a, b, c)
@@ -166,6 +175,14 @@ def get_latest_rows(connection, table_name, rows_amount, result_as_dataclass=Fal
     return array_toDataclass(data, table_name)
 
 
+def create_database(db_file):
+    """Creates tables for our project's database and writes them to db file"""
+    connection = create_connection(db_file)
+    connection.execute(USERS_TABLE_GENERATOR_SQL)
+    connection.execute(POSTS_TABLE_GENERATOR_SQL)
+    connection.execute(RATES_TABLE_GENERATOR_SQL)
+    connection.commit()
+    
 
 def print_table(connection, table_name):
     """Prints a SQLite table"""
@@ -178,14 +195,22 @@ def print_table(connection, table_name):
     except:
         raise ValueError(f"Requested table {table_name} doesn't exist!")
 
+        
+def drop_db(connection):
+    """Clears all data from database."""
+    for i in USED_TABLES:
+        clear_table(connection, i)
+    connection.commit()
 
-def test_use_getdata():
+    
+    
+def example_use_getdata():
     connection = create_connection("C:\\Users\\79246\\Desktop\\flask-retromemes-app\\database\\memes.db")
     array_classes = get_all_tabledata(connection, 'post', True)
     print(array_classes)
 
 
-def test_use_adddata():
+def example_use_adddata():
     connection = create_connection("C:\\Users\\79246\\Desktop\\flask-retromemes-app\\database\\memes.db")
     clear_table(connection, 'users')
     fieldnames = ('id', 'login', 'password', 'avatar', 'email')
