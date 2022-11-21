@@ -9,7 +9,7 @@ POST_FIELDNAMES = ('id', 'author_id', 'text', 'image', 'date', 'like', 'dislike'
 RATES_FIELDNAMES = ('id', 'real_likes', 'real_dislikes')
 
 USERS_TABLE_GENERATOR_SQL = '''
-    create table users (
+    create table IF NOT EXISTS  users (
         id integer primary key autoincrement not null,
         admin integer not null,
         login text not null,
@@ -20,7 +20,7 @@ USERS_TABLE_GENERATOR_SQL = '''
 
 
 POSTS_TABLE_GENERATOR_SQL = '''
-    create table post (
+    create table IF NOT EXISTS  post (
         id integer primary key autoincrement not null,
         author_id integer not null,
         text text not null,
@@ -31,7 +31,7 @@ POSTS_TABLE_GENERATOR_SQL = '''
         ) '''
 
 RATES_TABLE_GENERATOR_SQL = '''
-        create table rates (
+        create table IF NOT EXISTS rates (
             post_id integer primary key autoincrement not null,
             real_likes text not null
             real_dislikes text not null )
