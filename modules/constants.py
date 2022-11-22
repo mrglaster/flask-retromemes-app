@@ -3,7 +3,7 @@ POSTS_TABLENAME = 'post'
 RATES_TABLENAME = 'rates'
 HISTORY_TABLENAME = 'history'
 
-USED_TABLES = [USERS_TABLENAME, POSTS_TABLENAME, RATES_TABLENAME, HISTORY_TABLE]
+USED_TABLES = [USERS_TABLENAME, POSTS_TABLENAME, RATES_TABLENAME, HISTORY_TABLENAME]
 
 USER_FIELDNAMES = ('id', 'admin', 'login',  'password', 'avatar', 'email')
 POST_FIELDNAMES = ('id', 'author_id', 'text', 'image', 'date', 'like', 'dislike')
