@@ -10,6 +10,9 @@ POST_FIELDNAMES = ('id', 'author_id', 'text', 'image', 'date', 'like', 'dislike'
 RATES_FIELDNAMES = ('id', 'history_id')
 HISTORY_FIELDNAMES = ('id', 'post_id', 'user_id', 'action')
 
+ADMIN_STATE = 1
+USER_STATE = 0
+
 USERS_INDIVIDUAL_FIELDS = [True, False, True, False, False, True]
 
 
