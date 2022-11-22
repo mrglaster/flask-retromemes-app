@@ -226,3 +226,21 @@ def delete_post_bID(post_id, connection, basic_path):
         return 200
     except:
         return 100
+    
+def is_user_admin(connection, user_data, user_data_type='id'):
+    """Checks if user with input id or login is an admin"""
+    if user_data_type == 'id' or user_data_type == 'login':
+        sql_request = f"SELECT admin from users where {user_data_type}='{user_data}'"
+        result = connection.execute(sql_request).fetchall()[0][0]
+        print(f"Checking user with name = {user_data} and result = {result}", file=sys.stdout)
+        return result == ADMIN_STATE
+    raise ValueError(f'Unable user data type: {user_data_type}, value = {user_data}')
+
+
+def add_admin(db_file, admin_name):
+    """Creates new synthetic administrator user with name = admin_name"""
+    connection = create_connection(db_file)
+    add_data(connection=connection, tablename='users',
+             dataclass_element=User(1, 1, admin_name, 'root', DEFAULT_AVATAR, 'nope'),
+             individual_fields=USERS_INDIVIDUAL_FIELDS)
+    connection.commit()
