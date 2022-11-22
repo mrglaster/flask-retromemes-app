@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/styles/nav.css">
+    <link rel="stylesheet" href="../static/styles/admin.css">
+    <link rel="stylesheet" href="../static/styles/index.css">
+    <!-- <link rel="stylesheet" href="{{url_for('static', filename='styles/auth.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/nav.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/auth-mobile.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/nav-mobile.css')}}">  -->
+</head>
+<body>
+    <nav>
+        <a href="feed"><div>Feed</div></a>
+        <a href="upload"><div>Post</div></a>
+        <a href="myups"><div>My memes</div></a>
+    </nav>
+
+    <main>
+        <div>
+            <div class="user_avatar">
+                <img src="../static//images/ava.jpg" alt="avatar">
+            </div>
+            <div class="name">
+                <div>Viktor Korneplod</div>
+                <div>ADMIN</div>
+            </div>
+            <div class="exit">Exit</div>
+        </div>
+        <form action="" method="POST">
+            <div>Admin panel</div>
+            <div class="actions">
+                <input type="text" name="nickname" placeholder="nickname">
+                <input type="submit" name="type[ban]" value="Ban">
+                <input type="submit" name="type[unban]" value="Unban">
+                <input type="submit" name="type[delete]" value="Delete">
+                <input type="submit" name="type[makeadmin]" value="Make admin">
+                <input type="submit" name="type[makemoderator]" value="Make moderator">
+                <input type="submit" name="type[makeuser]" value="Make user">
+            </div>
+        </form>
+        <div>
+            <div class="post">
+                <div class="avatar">
+                    <img src="../static/images/ava.jpg" alt="avatar">
+                </div>
+                <div class="datapost">
+                    <div>Viktor Korneplod</div>
+                    <div>14.11.2022</div>
+                </div>
+                <div class="options">
+                    ...
+                    <div>
+                        
+                    </div>
+                </div>
+                <div class="content">
+                    <div>А почему вы укрываетесь одеялом?</div>
+                    <div><img src="../static/images/meme.jpg" alt="meme"></div>
+                </div>
+                <div class="reaction">
+                    <div>
+                        <div></div>
+                        <div>1</div>
+                    </div>
+                    <div>
+                        <div></div>
+                        <div>95</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
