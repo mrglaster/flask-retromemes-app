@@ -213,38 +213,16 @@ def get_userid_byname(user_name, db_file):
     return result    
     
     
-def example_use_getdata():
-    connection = create_connection("C:\\Users\\79246\\Desktop\\flask-retromemes-app\\database\\memes.db")
-    array_classes = get_all_tabledata(connection, 'post', True)
-    print(array_classes)
-
-
-def example_use_adddata():
-    connection = create_connection("C:\\Users\\79246\\Desktop\\flask-retromemes-app\\database\\memes.db")
-    clear_table(connection, 'users')
-    fieldnames = ('id', 'login', 'password', 'avatar', 'email')
-    bools = [True, True, False, False, True]
-    testuser = User(1, "AdminsMom228", "test", "yrs", "blablabla@mail.ru")
-    add_data(connection=connection, tablename='users', field_names=fieldnames, dataclass_element=testuser,
-             individual_fields=None)
-
-    #WONT WORK! MESSAGE WILL BE WRITTEN TO CHAT!
-    add_data(connection=connection, tablename='users', field_names=fieldnames, dataclass_element=testuser,
-             individual_fields=bools)
-    print_table(connection=connection, table_name='users')
-
-    
-    
-def get_latest_users_demo():
-    connection = create_connection("C:\\Users\\Glaster\\Desktop\\flask-retromemes-app-main\\database\\memes.db")
-    fieldnames = ('id', 'login', 'password', 'avatar', 'email')
-    bools = [True, True, False, False, True]
-    for i in range(10):
-        testuser = User(1, f"AdminsMom22{i}", "test", "yrs", f"blablabla{i}@mail.ru")
-        add_data(connection=connection, tablename='users', field_names=fieldnames, dataclass_element=testuser, individual_fields=bools)
-    print(get_latest_rows(connection, 'users', 10))
-    clear_table(connection, 'users')
-
-
-test_use_getdata()
-test_use_adddata()
+def delete_post_bID(post_id, connection, basic_path):
+    """Delete post by it's id"""
+    try:
+        sql_request = f"SELECT image from post where id='{post_id}'"
+        result = connection.execute(sql_request).fetchall()[0][0]
+        if len(result) == 0:
+            return 100
+        print(f"Removing path: {basic_path+'//'+result}")
+        os.remove(basic_path+'\\'+result)
+        delete_row_bId(connection, 'post', post_id)
+        return 200
+    except:
+        return 100
