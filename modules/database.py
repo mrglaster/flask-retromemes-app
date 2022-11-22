@@ -202,6 +202,15 @@ def drop_db(connection):
         clear_table(connection, i)
     connection.commit()
 
+
+
+def get_userid_byname(user_name, db_file):
+    """Gets user's id by it's username"""
+    connection = create_connection(db_file)
+    sql_querry = f"SELECT id FROM users WHERE login='{user_name}'"
+    result = connection.execute(sql_querry).fetchall()[0][0]
+    connection.close()
+    return result    
     
     
 def example_use_getdata():
