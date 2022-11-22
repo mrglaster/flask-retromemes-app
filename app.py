@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 import os
 import sqlite3 as sl
 import sys
+from datetime import date
 from modules.dummies import generate_dummypage
 from modules.database import *
 
@@ -35,12 +36,14 @@ def upload_meme():
 	if request.method == 'POST':
 		# check if the post request has the file part
 		if 'file' in request.files:
-			print("THERE IZ DA FILE! ", file=sys.stdout)
+			username = session['login']
 			file = request.files['file']
 			if file.filename != '' and allowed_file(file.filename):
 				filename = secure_filename(file.filename)
 				print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 				file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+				connection = create_connection(DATABASE_PATH)
+				add_data(connection=connection, tablename='post', dataclass_element=Post(id=0, author_id=get_userid_byname(username, DATABASE_PATH), text=request.form.get('comment'), image=filename, date=str(date.today()), like=0, dislike=0))
 				return redirect(url_for('show_feed'))
 	return render_template('upload.html')
 
@@ -81,7 +84,7 @@ def register_user():
 			path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 			file.save(path)
 		con = sl.connect(DATABASE_PATH)
-		email = f"user_email_{login}{path}@mail.ru"
+		email = f"user_email_{login}{path[len(path)-4:]}@mail.ru"
 		val = add_data(connection=con, tablename='users', dataclass_element=User(0, 0, login, password, path, email), individual_fields=USERS_INDIVIDUAL_FIELDS)
 		session['login'] = login
 	return render_template('register.html')
