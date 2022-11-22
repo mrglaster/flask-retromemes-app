@@ -1,13 +1,13 @@
-from flask import Flask, flash, request, redirect, url_for, session, render_template
-from werkzeug.utils import secure_filename
 import os
 import sqlite3 as sl
 import sys
+import time
 from datetime import date
+from flask import Flask, flash, request, redirect, url_for, session, render_template
+from werkzeug.utils import secure_filename
 from modules.dummies import generate_dummypage
 from modules.database import *
 
-# from modules.database import get_table_column, create_connection
 
 app = Flask(__name__, template_folder='templates')
 
@@ -39,8 +39,7 @@ def upload_meme():
 			username = session['login']
 			file = request.files['file']
 			if file.filename != '' and allowed_file(file.filename):
-				filename = secure_filename(file.filename)
-				print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+				filename = str(date.today())+"_time_"+str(time.time())+".png"
 				file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 				connection = create_connection(DATABASE_PATH)
 				add_data(connection=connection, tablename='post', dataclass_element=Post(id=0, author_id=get_userid_byname(username, DATABASE_PATH), text=request.form.get('comment'), image=filename, date=str(date.today()), like=0, dislike=0))
