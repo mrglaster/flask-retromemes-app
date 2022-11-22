@@ -7,6 +7,7 @@ from flask import Flask, flash, request, redirect, url_for, session, render_temp
 from werkzeug.utils import secure_filename
 from modules.dummies import generate_dummypage
 from modules.database import *
+from modules.dummies import *
 
 
 app = Flask(__name__, template_folder='templates')
@@ -55,6 +56,19 @@ def upload_meme():
 def show_feed():
 	return render_template("index.html")
 
+
+@app.route('/admin', methods=['GET', 'POST'])
+@app.route('/adminpannel', methods=['GET', 'POST'])
+@app.route('/adminpanel', methods=['GET', 'POST'])
+def admin_panel():
+	try:
+		username = session['login']
+		connection = create_connection(DATABASE_PATH)
+		if is_user_admin(connection, username, 'login'):
+			return render_template('admin.html')
+		return generate_notadmin_page()
+	except:
+		return generate_notadmin_page()
 
 # Handling of 404 error
 @app.errorhandler(404)
@@ -109,6 +123,9 @@ def login_user():
 	return render_template('auth.html')
 
 
+
+
 # Programm run
 if __name__ == '__main__':
+	#add_admin(DATABASE_PATH, "billy_herrington")
 	app.run(host="0.0.0.0")
