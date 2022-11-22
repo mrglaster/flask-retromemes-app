@@ -35,10 +35,8 @@ def upload_meme():
 	if request.method == 'POST':
 		# check if the post request has the file part
 		if 'file' in request.files:
+			print("THERE IZ DA FILE! ", file=sys.stdout)
 			file = request.files['file']
-			# if user does not select file, browser also
-			# submit an empty part without filename
-
 			if file.filename != '' and allowed_file(file.filename):
 				filename = secure_filename(file.filename)
 				print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
