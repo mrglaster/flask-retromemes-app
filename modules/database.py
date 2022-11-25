@@ -7,6 +7,7 @@ import sys
 from modules.users import User
 from modules.posts import Post
 from modules.rates import Rates
+from modules.history import History
 from dataclasses import astuple
 from modules.constants import *
 
@@ -196,7 +197,7 @@ def print_table(connection, table_name):
                 print('----------')
                 cntr +=1
             if cntr == 0:
-                print("Table is empty!")
+                print(f"Table {table_name} is empty!")
     except:
         raise ValueError(f"Requested table {table_name} doesn't exist!")
 
@@ -207,6 +208,13 @@ def drop_db(connection):
         clear_table(connection, i)
     connection.commit()
 
+def print_database(database_file):
+    """Prints every table of the database"""
+    print(f'\n\n==================================================================================================\nPrinting database {database_file}\n==================================================================================================\n\n')
+    con = create_connection(database_file)
+    for i in USED_TABLES:
+        print(f'\n\nPrinting table {i} \n\n')
+        print_table(con, i)
 
 
 def get_userid_byname(user_name, db_file):
@@ -258,7 +266,7 @@ def add_user(connection, dataclass_user_object):
 
 def add_post(connection, dataclass_post_object):
     """Adds post to table. Post must be a dataclass object"""
-    res = add_data(connection, 'post', dataclass_post_object)
+    res = add_data(connection, 'post', dataclass_post_object, POSTS_INDIVIDUAL_FIELDS)
     connection.commit()
     return res
 
@@ -289,11 +297,13 @@ def create_testdata_database(db_file_path, memes_folder_path):
     print_table(connection, 'users')
     print("\n\nUsers were successfully added!\n\n")
     os.chdir(memes_folder_path)
-    # TODO ensure how do we get meme's image path
+    # TODO ensure how do storage meme's image path
     print('\n', "Adding posts\n\n")
     for i in [f for f in os.listdir('.') if os.path.isfile(f)]:
         user_id = random.randint(1, 3)
         post = Post(0, user_id, f"Hi! My name is {get_username_bId(user_id, DATABASE_PATH)} and it's my meme!", i, "01.01.1900", 0, 0)
         add_post(connection, post)
     print_table(connection, 'post')
+    connection.commit()
     print("\n\n Experimental data was successfully added!")
+    print_database(db_file_path)
