@@ -1,7 +1,16 @@
+import os
+
 USERS_TABLENAME = 'users'
 POSTS_TABLENAME = 'post'
 RATES_TABLENAME = 'rates'
 HISTORY_TABLENAME = 'history'
+
+DATABASE_PATH = os.getcwd() + '\\' + "database" + '\\' + "memes.db"
+UPLOAD_FOLDER = os.getcwd() + '\\' + "static\\images\\uploaded_memes\\"
+DEFAULT_AVATAR = os.getcwd() + "\\static\\images\\ava.png"
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+
 
 USED_TABLES = [USERS_TABLENAME, POSTS_TABLENAME, RATES_TABLENAME, HISTORY_TABLENAME]
 
