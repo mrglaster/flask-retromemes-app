@@ -63,12 +63,19 @@ main {
     color: #a7a1a1;
 }
 
-.options {
+.delete {
     grid-column: 12/13;
     color:#a7a1a1;
     height: 15px;
     vertical-align: center;
     cursor:pointer;
+}
+
+.delete > div {
+    background-image: url("../svg/trash.svg");
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 3px 3px;
 }
 
 .content {
@@ -105,7 +112,7 @@ main {
 }
 
 
-.reaction > div div {
+.reaction > div div, .delete > div {
     width: 25px;
     height: 25px;
 }
