@@ -1,0 +1,30 @@
+@media (max-width: 640px) {
+    main {
+        margin: 0 15px;
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .post {
+        grid-column: 1/7;
+        grid-template-columns: repeat(6, 1fr);
+        padding: 5px;
+    }
+
+    .avatar > img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+
+    .datapost {
+        grid-column: 2/6;
+    }
+
+    .delete {
+        grid-column: 6/7;
+    }
+
+    .content, .reaction {
+        grid-column: 1/7;
+    }
+}

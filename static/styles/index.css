@@ -32,6 +32,10 @@ main {
     grid-column-gap: 20px;
     margin: 30px auto;
     font-size: 14pt;
+    -webkit-box-shadow: -1px 0px 10px 12px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: -1px 0px 10px 12px rgba(34, 60, 80, 0.2);
+    box-shadow: -1px 0px 10px 12px rgba(34, 60, 80, 0.2);
+    border-radius: 15px;
 }
 
 .avatar {
@@ -94,7 +98,6 @@ main {
 .reaction {
     grid-column: 1/13;
     width: 100px;
-    height: 100px;
     display: flex;
 }
 

@@ -25,6 +25,17 @@ nav > a:nth-child(2) {
     grid-column: 5/8;
 }
 
-nav > a:last-child {
+nav > a:nth-child(3) {
     grid-column: 8/10;
+}
+
+nav > a:last-child {
+    margin: 5px;
+    grid-column: 12/13;
+}
+
+nav > a:last-child > div img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
 }

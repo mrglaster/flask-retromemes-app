@@ -65,7 +65,7 @@ main > div:first-child {
 }
 
 .exit {
-    grid-column: 10/12;
+    grid-column: 12/13;
     background-color: #ecf1f6;
     width: 80px;
     height: 20px;
@@ -73,6 +73,7 @@ main > div:first-child {
     text-align: center;
     border-color: rgba(27,31,36,0.15);
     border-radius: 4px;
+    margin: 30px;
 }
 
 form {
@@ -95,7 +96,7 @@ form > div:first-child {
 }
 
 form > div:last-child {
-    grid-column: 1/8;
+    grid-column: 1/13;
     margin-top: 15px;
 }
 
@@ -158,6 +159,7 @@ input[name="type[ban]"], input[name="type[unban]"], input[name="type[delete]"], 
 input[name="type[makemoderator]"], input[name="type[makeuser]"] {
     color: #fff;
     padding: 5px 12px;
+    margin-top: 7px;
 }
 
 input[name="type[ban]"]:hover, input[name="type[unban]"]:hover, input[name="type[delete]"]:hover, 
