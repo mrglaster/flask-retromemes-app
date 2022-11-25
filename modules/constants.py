@@ -14,6 +14,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 USED_TABLES = [USERS_TABLENAME, POSTS_TABLENAME, RATES_TABLENAME, HISTORY_TABLENAME]
 
+
 USER_FIELDNAMES = ('id', 'admin', 'login',  'password', 'avatar', 'email')
 POST_FIELDNAMES = ('id', 'author_id', 'text', 'image', 'date', 'like', 'dislike')
 RATES_FIELDNAMES = ('id', 'history_id')
@@ -23,6 +24,7 @@ ADMIN_STATE = 1
 USER_STATE = 0
 
 USERS_INDIVIDUAL_FIELDS = [True, False, True, False, False, True]
+POSTS_INDIVIDUAL_FIELDS = [True, False, False, True, False, False, False]
 
 
 USERS_TABLE_GENERATOR_SQL = '''
