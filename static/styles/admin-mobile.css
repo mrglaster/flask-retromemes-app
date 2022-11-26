@@ -4,9 +4,9 @@
         grid-template-columns: repeat(6, 1fr);
     }
 
-    main > div:first-child {
-        margin: 0 15px;
-        grid-column: 1/7;
+    main > div:nth-of-type(2) {
+        margin: 15px;
+        grid-column: 1/6;
         grid-template-columns: repeat(6, 1fr);
     }
 
@@ -20,11 +20,25 @@
     }
 
     .name {
-        grid-column: 3/7;
+        grid-column: 2/7;
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .name > div:first-child {
+        grid-column: 1/7;
+        font-size: 13pt;
+    }
+
+    .name > div:last-child {
+        grid-column: 1/6;
+        width: 60px;
+        height: 20px;
+        font-size: 10pt;
     }
 
     .exit {
-        grid-column: 5/7;
+        grid-column: 6/7;
+        margin: 15px;
     }
 
     .user_avatar > img {
@@ -32,7 +46,7 @@
         height: 50px;
     }
 
-    form {
+    #adminpanel {
         grid-column: 1/7;
         margin: 15px;
     }

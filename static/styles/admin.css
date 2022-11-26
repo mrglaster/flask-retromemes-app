@@ -1,3 +1,5 @@
+@import url("font.css");
+
 body {
     padding: 0;
     margin: 0;
@@ -5,6 +7,7 @@ body {
     box-sizing: border-box;
     max-width: 100%;
     max-height: 100%;
+    
 }
 
 main {
@@ -20,7 +23,7 @@ main {
     padding-bottom: 30px;
 }
 
-main > div:first-child {
+main > div:nth-of-type(2) {
     grid-column: 1/12;
     margin: 30px;
     display: grid;
@@ -40,7 +43,7 @@ main > div:first-child {
 }
 
 .name {
-    grid-column: 4/9;
+    grid-column: 4/10;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-column-gap: 20px;
@@ -65,7 +68,7 @@ main > div:first-child {
 }
 
 .exit {
-    grid-column: 12/13;
+    grid-column: 11/13;
     background-color: #ecf1f6;
     width: 80px;
     height: 20px;
@@ -74,9 +77,14 @@ main > div:first-child {
     border-color: rgba(27,31,36,0.15);
     border-radius: 4px;
     margin: 30px;
+    cursor: pointer;
 }
 
-form {
+#exitform {
+    display: none;
+}
+
+#adminpanel {
     grid-column: 1/13;
     margin: 30px;
     background-color: #d6d1d1;
@@ -87,7 +95,7 @@ form {
     grid-column-gap: 20px;
 }
 
-form > div:first-child {
+#adminpanel > div:first-child {
     font-size: 14pt;
     font-weight: 600;
     margin-top: 15px;
@@ -95,63 +103,63 @@ form > div:first-child {
     grid-column: 1/13;
 }
 
-form > div:last-child {
+#adminpanel > div:last-child {
     grid-column: 1/13;
     margin-top: 15px;
 }
 
-form > .actions > input {
+#adminpanel > .actions > input {
     padding: 5px;
     border-radius: 5px;
     border: 1px;
     box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
 }
 
-form > .actions > input[name="type[ban]"] {
+#adminpanel > .actions > input[name="type[ban]"] {
     background-color: #e20000;
 }
 
-form > .actions > input[name="type[ban]"]:hover {
+#adminpanel > .actions > input[name="type[ban]"]:hover {
     background-color: #cc0909;
 }
 
-form > .actions > input[name="type[unban]"] {
+#adminpanel > .actions > input[name="type[unban]"] {
     background-color: #0cb61a;
 }
 
-form > .actions > input[name="type[unban]"]:hover {
+#adminpanel > .actions > input[name="type[unban]"]:hover {
     background-color: #0e9b1a;
 }
 
-form > .actions > input[name="type[delete]"] {
+#adminpanel > .actions > input[name="type[delete]"] {
     background-color: #cf1d1d;
 }
 
-form > .actions > input[name="type[delete]"]:hover {
+#adminpanel > .actions > input[name="type[delete]"]:hover {
     background-color: #bb2e2e;
 }
 
-form > .actions > input[name="type[makeadmin]"] {
+#adminpanel > .actions > input[name="type[makeadmin]"] {
     background-color: #e20000;
 }
 
-form > .actions > input[name="type[makeadmin]"]:hover {
+#adminpanel > .actions > input[name="type[makeadmin]"]:hover {
     background-color: #cc0909;
 }
 
-form > .actions > input[name="type[makemoderator]"] {
+#adminpanel > .actions > input[name="type[makemoderator]"] {
     background-color: #0b6dc9;
 }
 
-form > .actions > input[name="type[makemoderator]"]:hover {
+#adminpanel > .actions > input[name="type[makemoderator]"]:hover {
     background-color: #0c59a1;
 }
 
-form > .actions > input[name="type[makeuser]"] {
+#adminpanel > .actions > input[name="type[makeuser]"] {
     background-color: #5ea4c5;
 }
 
-form > .actions > input[name="type[makeuser]"]:hover {
+#adminpanel > .actions > input[name="type[makeuser]"]:hover {
     background-color: #417c97;
 }
 

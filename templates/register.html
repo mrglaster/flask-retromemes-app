@@ -11,16 +11,12 @@
     <link rel="stylesheet" href="{{url_for('static', filename='styles/nav-mobile.css')}}"> 
 </head>
 <body>
-    <nav>
-        <a href="feed"><div>Feed</div></a>
-        <a href="upload"><div>Post</div></a>
-        <a href="myups"><div>My memes</div></a>
-    </nav>
+    {% include "nav.html" %}
 
     <main>
         <div>
             <h3>Sign up</h3>
-            <form action="" method="POST">
+            <form action="" method="POST" enctype="multipart/form-data">
                 <table>
                     <tr>
                         <td>Login</td>

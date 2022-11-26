@@ -52,23 +52,46 @@ def upload_meme():
 @app.route("/feed", methods=['GET', 'POST'])
 @app.route("/index", methods=['GET', 'POST'])
 @app.route("/main", methods=['GET', 'POST'])
-def show_feed():
-    return render_template("index.html")
+def show_feed(page=1):
+    if request.method == "GET" and request.args.get('page'):
+        page = int(request.args.get('page'))
+    dataposts = list(get_all_tabledata(create_connection('C:\\Users\\79246\\PycharmProjects\\flask-retromemes-app\\'
+                                                'database\\memes_testdata.db'), 'Post'))
+    pages = len(dataposts) // PAGES_POSTS
+    if len(dataposts) % PAGES_POSTS != 0:
+        pages += 1
+    posts = []
+    limit = page * PAGES_POSTS
+    if limit > len(dataposts):
+        limit = len(dataposts)
+    # Generate posts
+    for i in range((page - 1) * PAGES_POSTS, limit):
+        author_name = get_username_bId(dataposts[i][1], 'C:\\Users\\79246\\PycharmProjects\\flask-retromemes-app\\'
+                                                    'database\\memes_testdata.db')
+        avatar = get_user_avatar_bId(dataposts[i][1], 'C:\\Users\\79246\\PycharmProjects\\flask-retromemes-app\\'
+                                                    'database\\memes_testdata.db')
+        post = {'avatar': AVATAR_FOLDER + avatar, 'author_id': dataposts[i][1],
+                'author_name': author_name, 'date': dataposts[i][4], 'comment': dataposts[i][2],
+                'image': MEMES_FOLDER + dataposts[i][3], }
+        posts.append(post)
+    return render_template("index.html", posts=posts, pages=pages)
 
 
 @app.route('/admin', methods=['GET', 'POST'])
 @app.route('/adminpannel', methods=['GET', 'POST'])
 @app.route('/adminpanel', methods=['GET', 'POST'])
 def admin_panel():
-    try:
-        username = session['login']
-        connection = create_connection(DATABASE_PATH)
-        if is_user_admin(connection, username, 'login'):
-            return render_template('admin.html')
-        return generate_notadmin_page()
-    except:
-        return generate_notadmin_page()
-
+    if request.method == 'POST':
+        print(list(request.form))
+    # try:
+    #     username = session['login']
+    #     connection = create_connection(DATABASE_PATH)
+    #     if is_user_admin(connection, username, 'login'):
+    #         return render_template('admin.html')
+    #     return generate_notadmin_page()
+    # except:
+    #     return generate_notadmin_page()
+    return render_template('admin.html')
 
 # Handling of 404 error
 @app.errorhandler(404)
@@ -116,15 +139,17 @@ def login_user():
         login = request.form.get('login')
         password = request.form.get('password')
         con = sl.connect(DATABASE_PATH)
-        sql = f"SELECT password,id FROM users WHERE `login`='{login}'"
+        sql = f"SELECT password,id, admin FROM users WHERE `login`='{login}'"
         result = list(con.execute(sql))
         if password == result[0][0]:
             session['login'] = login
             session['id'] = result[0][1]
+            session['admin'] = result[0][2]
+        redirect('show_feed')
     return render_template('auth.html')
 
 
 # Programm run
 if __name__ == '__main__':
     #create_testdata_database(DATABASE_PATH, "C:\\Users\\Glaster\\Desktop\\memes\\")
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", debug=True)

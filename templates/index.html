@@ -5,38 +5,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Загрузка поста</title>
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/post.css')}}"> -->
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css')}}"> -->
-    <link rel="stylesheet" href="../static/styles/index.css">
-    <link rel="stylesheet" href="../static/styles/nav.css">
-    <link rel="stylesheet" href="../static/styles/index-mobile.css">
-    <link rel="stylesheet" href="../static/styles/nav-mobile.css">
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/nav.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index-mobile.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/nav-mobile.css')}}">
 </head>
 <body>
-    <nav>
-            <a href="feed"><div>Feed</div></a>
-            <a href="upload"><div>Post</div></a>
-            <a href="myups"><div>My memes</div></a>
-    </nav>
-
+    {% include "nav.html" %}
+    {% block content %}
     <main>
+        {% for post in posts %}
         <div class="post">
             <div class="avatar">
-                <img src="../static/images/ava.jpg" alt="avatar">
+                <img src="{{ url_for('static', filename=post['avatar']) }}" alt="avatar">
             </div>
             <div class="datapost">
-                <div>Viktor Korneplod</div>
-                <div>14.11.2022</div>
+                <div>{{ post['author_name'] }}</div>
+                <div>{{ post['date'] }}</div>
             </div>
+            {% if session['admin'] > 0 or session['id'] == post['author_id'] %}
+            {% include "trash.html" %}
+            {% endif %}
             <div class="content">
-                <div>А почему вы укрываетесь одеялом?</div>
-                <div><img src="../static/images/meme.jpg" alt="meme"></div>
+                <div>{{ post['comment'] }}</div>
+                <div><img src="{{ url_for('static', filename=post['image']) }}" alt="meme"></div>
             </div>
             <div class="reaction">
-                <div><img src="../static/svg/like_84048.svg" alt=""></div>
+                <div>
+                    <div></div>
+                    <div>1</div>
+                </div>
+                <div>
+                    <div></div>
+                    <div>95</div>
+                </div>
             </div>
         </div>
+        {% endfor %}
+        <div class="pages">
+            {% for i in range(1, pages + 1) %}
+            <a href="?page={{i}}"><div>{{ i }}</div></a>
+            {% endfor %}
+        </div>
     </main>
+    {% endblock %}
 </body>
 </html>

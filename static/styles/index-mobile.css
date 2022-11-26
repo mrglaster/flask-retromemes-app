@@ -11,6 +11,7 @@
     }
 
     .avatar > img {
+        margin-top: 5px;
         width: 30px;
         height: 30px;
         border-radius: 50%;
@@ -20,11 +21,23 @@
         grid-column: 2/6;
     }
 
+    .datapost > div:first-child {
+        font-size: 12pt;
+    }
+
+    .datapost > div:last-child {
+        font-size: 9pt;
+    }
+
     .delete {
         grid-column: 6/7;
     }
 
     .content, .reaction {
         grid-column: 1/7;
+    }
+
+    .content > div, .reaction {
+        font-size: 12pt;
     }
 }

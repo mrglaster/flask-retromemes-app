@@ -1,0 +1,18 @@
+h1, nav {
+    font-family: "Montserrat";
+}
+
+body {
+    font-family: "Roboto";
+}
+
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-Light.ttf");
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("../fonts/RobotoCondensed-Regular.ttf")
+}

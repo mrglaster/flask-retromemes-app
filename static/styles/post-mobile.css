@@ -6,12 +6,13 @@
         
     main > h1:first-of-type {
         grid-column: 2/6;
-        font-size: 14pt;
+        font-size: 13pt;
     }
     
     main > form {
         grid-column: 1/7;
         grid-template-columns: repeat(6, 1fr);
+        font-size: 10pt;
     }
     
     form > div {

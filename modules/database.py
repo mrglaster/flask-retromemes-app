@@ -230,6 +230,12 @@ def get_username_bId(user_id, db_file):
     result = connection.execute(sql_querry).fetchall()[0][0]
     return result
 
+def get_user_avatar_bId(user_id, db_file):
+    connection = create_connection(db_file)
+    sql_query = f"SELECT avatar FROM users WHERE id={user_id}"
+    result = connection.execute(sql_query).fetchall()[0][0]
+    return result
+
     
 def delete_post_bID(post_id, connection, basic_path):
     """Delete post by it's id"""
@@ -277,7 +283,6 @@ def synthesize_admin(connection, admin_name, isAdmin = 1):
     user = User(1, isAdmin, admin_name, 'root', 'ava.png', f'nope_{admin_name}_{random.randint(10,1000)}')
     add_user(connection, user)
     connection.commit()
-
 
 def synthesize_user(connection, user_name):
     """Synthesizes user"""
