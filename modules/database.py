@@ -312,3 +312,12 @@ def create_testdata_database(db_file_path, memes_folder_path):
     connection.commit()
     print("\n\n Experimental data was successfully added!")
     print_database(db_file_path)
+
+    
+def get_dataclass_bId(connection, table_name, id):
+    """Parses database row with id=id as dataclass object. If something goes wrong returns None"""
+    if table_name in USED_TABLES:
+        sql_querry = f"SELECT * from {table_name} where id={id}"
+        result = connection.execute(sql_querry).fetchall()[0]
+        return _process_table_rowdata(table_name, result)
+    return None   
