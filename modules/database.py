@@ -1,8 +1,13 @@
+import copy
+import os
+import random
 import sqlite3
 import sqlite3 as sl
+import sys
 from modules.users import User
 from modules.posts import Post
 from modules.rates import Rates
+from modules.history import History
 from dataclasses import astuple
 from modules.constants import *
 
@@ -57,14 +62,6 @@ def delete_row_bId(connection, table_name, row, idname='id'):
     sql_request = f'DELETE FROM {table_name} WHERE id={row}'
     cur = connection.cursor()
     cur.execute(sql_request)
-    """
-    temp_table_name = f'temp_{table_name}_{idname}'
-    connection.execute(f'create temp table {temp_table_name} as select * from {table_name} order by id')
-    connection.execute(f'drop table {table_name}')
-    connection.execute(modules.constants.SQL_GENERATORS_CONTAINERS[table_name])
-    connection.execute(f'insert into {table_name}   select * from {temp_table_name} order by {idname}')
-    connection.execute(f'drop table {temp_table_name}')
-    """
     connection.commit()
 
 
@@ -130,6 +127,7 @@ def add_data(connection, tablename, dataclass_element, individual_fields=None):
 
 def _process_table_rowdata(table_name, data):
     """Processes table row as object of dataclass"""
+    table_name = table_name.lower()
     if table_name == 'users':
         a, f, b, c, d, e = data
         return User(a, f, b, c, d, e)
@@ -137,8 +135,11 @@ def _process_table_rowdata(table_name, data):
         a, b, c, d, e, f, g = data
         return Post(a, b, c, d, e, f, g)
     if table_name == 'rates':
-        a, b, c = data
-        return Rates(a, b, c)
+        a, b = data
+        return Rates(a, b)
+    if table_name == 'history':
+        a, b, c, d = data
+        return History(a, b, c, d)
     raise ValueError(f"Unknown table name: {table_name}")
 
 
@@ -181,6 +182,7 @@ def create_database(db_file):
     connection.execute(USERS_TABLE_GENERATOR_SQL)
     connection.execute(POSTS_TABLE_GENERATOR_SQL)
     connection.execute(RATES_TABLE_GENERATOR_SQL)
+    connection.execure(HISTORY_TABLE_GENERATOR_SQL)
     connection.commit()
     
 
@@ -189,9 +191,13 @@ def print_table(connection, table_name):
     try:
         with connection:
             data = connection.execute(f'SELECT * FROM {table_name}')
+            cntr = 0
             for row in data:
                 print(row)
                 print('----------')
+                cntr +=1
+            if cntr == 0:
+                print(f"Table {table_name} is empty!")
     except:
         raise ValueError(f"Requested table {table_name} doesn't exist!")
 
@@ -202,6 +208,13 @@ def drop_db(connection):
         clear_table(connection, i)
     connection.commit()
 
+def print_database(database_file):
+    """Prints every table of the database"""
+    print(f'\n\n==================================================================================================\nPrinting database {database_file}\n==================================================================================================\n\n')
+    con = create_connection(database_file)
+    for i in USED_TABLES:
+        print(f'\n\nPrinting table {i} \n\n')
+        print_table(con, i)
 
 
 def get_userid_byname(user_name, db_file):
@@ -209,9 +222,14 @@ def get_userid_byname(user_name, db_file):
     connection = create_connection(db_file)
     sql_querry = f"SELECT id FROM users WHERE login='{user_name}'"
     result = connection.execute(sql_querry).fetchall()[0][0]
-    connection.close()
     return result    
-    
+
+def get_username_bId(user_id, db_file):
+    connection = create_connection(db_file)
+    sql_querry = f"SELECT login FROM users WHERE id={user_id}"
+    result = connection.execute(sql_querry).fetchall()[0][0]
+    return result
+
     
 def delete_post_bID(post_id, connection, basic_path):
     """Delete post by it's id"""
@@ -230,6 +248,8 @@ def delete_post_bID(post_id, connection, basic_path):
 def is_user_admin(connection, user_data, user_data_type='id'):
     """Checks if user with input id or login is an admin"""
     if user_data_type == 'id' or user_data_type == 'login':
+        if user_data_type == 'id' and user_data <= 0:
+            raise ValueError(f"Can't get data of user with id = {user_data}. Minimal allowed id value is 1.")
         sql_request = f"SELECT admin from users where {user_data_type}='{user_data}'"
         result = connection.execute(sql_request).fetchall()[0][0]
         print(f"Checking user with name = {user_data} and result = {result}", file=sys.stdout)
@@ -237,10 +257,53 @@ def is_user_admin(connection, user_data, user_data_type='id'):
     raise ValueError(f'Unable user data type: {user_data_type}, value = {user_data}')
 
 
-def add_admin(db_file, admin_name):
-    """Creates new synthetic administrator user with name = admin_name"""
-    connection = create_connection(db_file)
-    add_data(connection=connection, tablename='users',
-             dataclass_element=User(1, 1, admin_name, 'root', DEFAULT_AVATAR, 'nope'),
-             individual_fields=USERS_INDIVIDUAL_FIELDS)
+
+def add_user(connection, dataclass_user_object):
+    """Adds user to table. User must be a dataclass object"""
+    res = add_data(connection, 'users', dataclass_user_object, individual_fields=USERS_INDIVIDUAL_FIELDS)
     connection.commit()
+    return res
+
+def add_post(connection, dataclass_post_object):
+    """Adds post to table. Post must be a dataclass object"""
+    res = add_data(connection, 'post', dataclass_post_object, POSTS_INDIVIDUAL_FIELDS)
+    connection.commit()
+    return res
+
+
+
+def synthesize_admin(connection, admin_name, isAdmin = 1):
+    """Creates new synthetic administrator user with name = admin_name"""
+    user = User(1, isAdmin, admin_name, 'root', 'ava.png', f'nope_{admin_name}_{random.randint(10,1000)}')
+    add_user(connection, user)
+    connection.commit()
+
+
+def synthesize_user(connection, user_name):
+    """Synthesizes user"""
+    synthesize_admin(connection, user_name, 0)
+    connection.commit()
+
+
+
+def create_testdata_database(db_file_path, memes_folder_path):
+    """Clears existing database and adds test data to tables Users and Post"""
+    connection = create_connection(db_file_path)
+    drop_db(connection)
+    print("\nFilling data of users\n\n") # TODO add different avatars for each test user
+    synthesize_admin(connection, 'Admin')
+    synthesize_admin(connection, 'Billy')
+    synthesize_user(connection, 'Van')
+    print_table(connection, 'users')
+    print("\n\nUsers were successfully added!\n\n")
+    os.chdir(memes_folder_path)
+    # TODO ensure how do storage meme's image path
+    print('\n', "Adding posts\n\n")
+    for i in [f for f in os.listdir('.') if os.path.isfile(f)]:
+        user_id = random.randint(1, 3)
+        post = Post(0, user_id, f"Hi! My name is {get_username_bId(user_id, DATABASE_PATH)} and it's my meme!", i, "01.01.1900", 0, 0)
+        add_post(connection, post)
+    print_table(connection, 'post')
+    connection.commit()
+    print("\n\n Experimental data was successfully added!")
+    print_database(db_file_path)

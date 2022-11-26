@@ -1,9 +1,19 @@
+import os
+
 USERS_TABLENAME = 'users'
 POSTS_TABLENAME = 'post'
 RATES_TABLENAME = 'rates'
 HISTORY_TABLENAME = 'history'
 
+DATABASE_PATH = os.getcwd() + '\\' + "database" + '\\' + "memes.db"
+UPLOAD_FOLDER = os.getcwd() + '\\' + "static\\images\\uploaded_memes\\"
+DEFAULT_AVATAR = os.getcwd() + "\\static\\images\\ava.png"
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+
+
 USED_TABLES = [USERS_TABLENAME, POSTS_TABLENAME, RATES_TABLENAME, HISTORY_TABLENAME]
+
 
 USER_FIELDNAMES = ('id', 'admin', 'login',  'password', 'avatar', 'email')
 POST_FIELDNAMES = ('id', 'author_id', 'text', 'image', 'date', 'like', 'dislike')
@@ -13,6 +23,7 @@ HISTORY_FIELDNAMES = ('id', 'post_id', 'user_id', 'action')
 ADMIN_STATE = 1
 USER_STATE = 0
 USERS_INDIVIDUAL_FIELDS = [True, False, True, False, False, True]
+POSTS_INDIVIDUAL_FIELDS = [True, False, False, True, False, False, False]
 
 
 USERS_TABLE_GENERATOR_SQL = '''
