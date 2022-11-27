@@ -19,6 +19,11 @@ pip install Werkzeug==1.0.1
 6) Profit!
 
 
+## Database structure 
+
+![alt text](https://github.com/mrglaster/flask-retromemes-app/blob/main/readme_images/db_info.jpg)
+
+
 ## Pages of the site
 
 ### Authorizarion and Registration 
@@ -57,3 +62,25 @@ User roles can be divided into 3 groups. The first and most numerous are ordinar
 ![alt text](https://github.com/mrglaster/flask-retromemes-app/blob/main/readme_images/just_moder.png)
 
 ![alt text](https://github.com/mrglaster/flask-retromemes-app/blob/main/readme_images/admin.png)
+
+
+## Web pages for errors (500, 404 etc)
+
+### Error 500
+
+![alt text](https://github.com/mrglaster/flask-retromemes-app/blob/main/static/images/error_images/500-image.png)
+
+### Error 404 
+
+![alt text](https://github.com/mrglaster/flask-retromemes-app/blob/main/static/images/error_images/404-image.png)
+
+### Error 400 
+
+![alt text](https://github.com/mrglaster/flask-retromemes-app/blob/main/static/images/error_images/400-image.png)
+
+### Error 403
+
+![alt image](https://github.com/mrglaster/flask-retromemes-app/blob/main/static/images/error_images/notadmin-image.png)
+
+![alt image](https://github.com/mrglaster/flask-retromemes-app/blob/main/static/images/error_images/403-image.png)
+
