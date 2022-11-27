@@ -1,0 +1,26 @@
+<div class="post">
+    <div class="avatar">
+        <img src="{{ url_for('static', filename=post['avatar']) }}" alt="avatar">
+    </div>
+    <div class="datapost">
+        <div>{{ post['author_name'] }}</div>
+        <div>{{ post['date'] }}</div>
+    </div>
+    {% if session['admin'] > 0 or session['id'] == post['author_id'] %}
+    {% include "trash.html" %}
+    {% endif %}
+    <div class="content">
+        <div>{{ post['comment'] }}</div>
+        <div><img src="{{ url_for('static', filename=post['image']) }}" alt="meme"></div>
+    </div>
+    <div class="reaction">
+        <div>
+            <div></div>
+            <div>1</div>
+        </div>
+        <div>
+            <div></div>
+            <div>95</div>
+        </div>
+    </div>
+</div>

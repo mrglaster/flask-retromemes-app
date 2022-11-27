@@ -84,14 +84,15 @@ def admin_panel():
     if request.method == 'POST':
         print(list(request.form))
     # try:
-    #     username = session['login']
-    #     connection = create_connection(DATABASE_PATH)
-    #     if is_user_admin(connection, username, 'login'):
-    #         return render_template('admin.html')
-    #     return generate_notadmin_page()
-    # except:
-    #     return generate_notadmin_page()
+    username = session['login']
+    connection = create_connection(DATABASE_PATH)
+        # if is_user_admin(connection, username, 'login'):
+    dataposts = list(get_all_tabledata(create_connection(DATABASE_PATH + 'memes_testdata.db'), 'Post'))
     return render_template('admin.html')
+        # return generate_notadmin_page()
+    # except:
+        # return generate_notadmin_page()
+    # return render_template('admin.html')
 
 # Handling of 404 error
 @app.errorhandler(404)
