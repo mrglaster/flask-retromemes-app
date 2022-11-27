@@ -3,20 +3,9 @@ import sqlite3 as sl
 from modules.constants import *
 from modules.database import *
 
-users = ['id', 'admin', 'login', 'password', 'avatar']
-post = ['id', 'author_id', 'text', 'image', 'date', 'like', 'dislike']
-rates = ['post_id', 'history_id']
-history = ['id', 'post_id', 'user_id', 'action']
-
-DB_root = ['users', 'post', 'rates', 'history']
-DB = [users, post, rates, history]
-
-
-# 0 = no action
-# 1 = like
-# 2 = dislike
 
 def give_last_action(post_id, user_id):
+    """Returns latest usre's action for post"""
     DB = sl.connect(DATABASE_PATH)
     hist = []
     with DB:
@@ -41,7 +30,8 @@ def give_last_action(post_id, user_id):
             return 0
 
 
-def counter_like(post_id, user_id, last_action, now_action):  # counter like or dislike
+def counter_like(post_id, user_id, last_action, now_action):  
+    """Conter for likes/dislikes"""
     DB = sl.connect(DATABASE_PATH)
     sql = DB.execute('SELECT * FROM post WHERE id == ' + str(post_id))
     for row in sql:
@@ -101,6 +91,7 @@ def counter_like(post_id, user_id, last_action, now_action):  # counter like or 
 
 
 def import_rates(post_id, history_id):
+    """Rates import"""
     DB = sl.connect(DATABASE_PATH)
     info = DB.execute('SELECT * FROM rates WHERE post_id=?', (post_id,))
 
@@ -131,6 +122,7 @@ def import_rates(post_id, history_id):
 
 
 def import_history(post_id, user_id, action):
+    """History import"""
     DB = sl.connect(DATABASE_PATH)  # path to db
     last_action = give_last_action(post_id, user_id)
     history_id = get_newestId(create_connection(DATABASE_PATH), 'history')
