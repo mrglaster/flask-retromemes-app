@@ -213,17 +213,16 @@ def login_user():
         con = sl.connect(DATABASE_PATH)
         sql = f"SELECT password,id, admin FROM users WHERE `login`='{login}'"
         result = list(con.execute(sql))
-        if len(result) == 0:
+        if len(result) == 0 or password != result[0][0]:
             return render_template("cant_login.html")
         if password == result[0][0]:
             session['login'] = login
             session['id'] = result[0][1]
             session['admin'] = result[0][2]
-        return renter_template("welcome_page.html")
+        return render_template("welcome_page.html")
     return render_template('auth.html')
 
 
 # Programm run
 if __name__ == '__main__':
-    #create_testdata_database(DATABASE_PATH, "C:\\Users\\Glaster\\Desktop\\memes\\")
     app.run(host="0.0.0.0", debug=True)
