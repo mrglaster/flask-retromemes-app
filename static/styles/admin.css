@@ -115,64 +115,64 @@ main > div:nth-of-type(2) {
     box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
 }
 
-#adminpanel > .actions > input[name="type[ban]"] {
+#adminpanel > .actions > input[value="Ban"] {
     background-color: #e20000;
 }
 
-#adminpanel > .actions > input[name="type[ban]"]:hover {
+#adminpanel > .actions > input[value="Ban"]:hover {
     background-color: #cc0909;
 }
 
-#adminpanel > .actions > input[name="type[unban]"] {
+#adminpanel > .actions > input[value="Unban"] {
     background-color: #0cb61a;
 }
 
-#adminpanel > .actions > input[name="type[unban]"]:hover {
+#adminpanel > .actions > input[value="Unban"]:hover {
     background-color: #0e9b1a;
 }
 
-#adminpanel > .actions > input[name="type[delete]"] {
+#adminpanel > .actions > input[value="Delete"] {
     background-color: #cf1d1d;
 }
 
-#adminpanel > .actions > input[name="type[delete]"]:hover {
+#adminpanel > .actions > input[value="Delete"]:hover {
     background-color: #bb2e2e;
 }
 
-#adminpanel > .actions > input[name="type[makeadmin]"] {
+#adminpanel > .actions > input[value="Make admin"] {
     background-color: #e20000;
 }
 
-#adminpanel > .actions > input[name="type[makeadmin]"]:hover {
+#adminpanel > .actions > input[value="Make admin"]:hover {
     background-color: #cc0909;
 }
 
-#adminpanel > .actions > input[name="type[makemoderator]"] {
+#adminpanel > .actions > input[value="Make moderator"] {
     background-color: #0b6dc9;
 }
 
-#adminpanel > .actions > input[name="type[makemoderator]"]:hover {
+#adminpanel > .actions > input[value="Make moderator"]:hover {
     background-color: #0c59a1;
 }
 
-#adminpanel > .actions > input[name="type[makeuser]"] {
+#adminpanel > .actions > input[value="Make user"] {
     background-color: #5ea4c5;
 }
 
-#adminpanel > .actions > input[name="type[makeuser]"]:hover {
+#adminpanel > .actions > input[value="Make user"]:hover {
     background-color: #417c97;
 }
 
-input[name="type[ban]"], input[name="type[unban]"], input[name="type[delete]"], input[name="type[makeadmin]"],
-input[name="type[makemoderator]"], input[name="type[makeuser]"] {
+input[value="Ban"], input[value="Unban"], input[value="Delete"], input[value="Make admin"],
+input[value="Make moderator"], input[value="Make user"] {
     color: #fff;
     padding: 5px 12px;
     margin-top: 7px;
 }
 
-input[name="type[ban]"]:hover, input[name="type[unban]"]:hover, input[name="type[delete]"]:hover, 
-input[name="type[makeadmin]"]:hover,
-input[name="type[makemoderator]"]:hover, input[name="type[makeuser]"]:hover {
+input[value="Ban"]:hover, input[value="Unban"]:hover, input[value="Delete"]:hover, 
+input[value="Make admin"]:hover,
+input[value="Make moderator"]:hover, input[value="Make user"]:hover {
     cursor: pointer;
 }
 

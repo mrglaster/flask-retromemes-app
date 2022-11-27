@@ -8,6 +8,7 @@ HISTORY_TABLENAME = 'history'
 DATABASE_PATH = os.getcwd() + '\\' + "database" + '\\' + "memes.db"
 UPLOAD_FOLDER = os.getcwd() + '\\' + "static\\images\\uploaded_memes\\"
 DEFAULT_AVATAR = os.getcwd() + "\\static\\images\\ava.png"
+UPLOAD_AVATAR_FOLDER = os.getcwd() + '\\static\\images\\avatars\\'
 AVATAR_FOLDER = 'images/avatars/'
 MEMES_FOLDER = 'images/uploaded_memes/'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}

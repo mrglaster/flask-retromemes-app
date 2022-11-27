@@ -141,8 +141,9 @@ main {
 
 .pages {
     display: flex;
+    justify-content: center;
     grid-column: 1/13;
-    margin: 10px auto;
+    margin: 10px;
 }
 
 .pages > a {

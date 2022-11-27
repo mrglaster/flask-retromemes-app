@@ -17,11 +17,7 @@
         {% for post in posts %}
         {% include "post.html" %}
         {% endfor %}
-        <div class="pages">
-            {% for i in range(1, pages + 1) %}
-            <a href="?page={{i}}"><div>{{ i }}</div></a>
-            {% endfor %}
-        </div>
+        
     </main>
     {% endblock %}
 </body>

@@ -84,7 +84,6 @@ def get_table_column(connection, table_name, column_name):
     cursor.execute(f"SELECT {column_name} FROM {table_name}")
     return cursor.fetchall()
 
-
 def is_value_used(connection, table_name, column_name, value):
     """Checks if input value was already used in some column"""
     all_columns = get_table_column(connection, table_name, column_name)
@@ -154,6 +153,11 @@ def get_all_tabledata(connection, table_name, result_as_dataclass=False):
         dataclass_result.append(_process_table_rowdata(table_name, i))
     return dataclass_result
 
+def get_author_posts(connection, author_id, result_as_dataclass=False):
+    """Returns posts by author_id"""
+    with connection:
+        data = connection.execute(f'SELECT * FROM Post WHERE author_id={author_id}')
+    return data
 
 def array_toDataclass(array, table_name):
     """Transforms bunch of table rows to concisting dataclasses"""
@@ -262,6 +266,21 @@ def is_user_admin(connection, user_data, user_data_type='id'):
         return result == ADMIN_STATE
     raise ValueError(f'Unable user data type: {user_data_type}, value = {user_data}')
 
+def make_admin(connection, username):
+    with connection:
+        connection.execute(f"UPDATE Users SET admin=2 WHERE login={username}")
+
+def make_moderator(connection, username):
+    with connection:
+        connection.execute(f"UPDATE Users SET admin=1 WHERE login={username}")
+
+def make_user(connection, username):
+    with connection:
+        connection.execute(f"UPDATE Users SET admin=0 WHERE login={username}")
+
+def delete_user(connection, username):
+    with connection:
+        connection.execute(f"DELETE FROM Users WHERE login={username}")
 
 
 def add_user(connection, dataclass_user_object):

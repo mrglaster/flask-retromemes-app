@@ -1,3 +1,4 @@
+{% for post in posts %}
 <div class="post">
     <div class="avatar">
         <img src="{{ url_for('static', filename=post['avatar']) }}" alt="avatar">
@@ -23,4 +24,10 @@
             <div>95</div>
         </div>
     </div>
+</div>
+{% endfor %}
+<div class="pages">
+    {% for i in range(1, pages + 1) %}
+    <a href="?page={{i}}"><div>{{ i }}</div></a>
+    {% endfor %}
 </div>
