@@ -251,6 +251,11 @@ def get_user_avatar_bId(user_id, db_file):
     result = connection.execute(sql_query).fetchall()[0][0]
     return result
 
+def get_reaction_bId(post_id, db_file):
+    connection = create_connection(db_file)
+    with connection:
+        data = connection.execute(f"SELECT like, dislike FROM Post WHERE id={post_id}")
+    return data
     
 def delete_post_bID(post_id, connection, basic_path):
     """Delete post by it's id"""

@@ -10,7 +10,7 @@ DB = [users, post, rates]
 
 con = sl.connect('memes.db')
 with con:
-    data = con.execute('SELECT * FROM users')
+    data = con.execute('SELECT * FROM Post')
     for row in data:
         print(row)
     print('----------')

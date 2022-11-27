@@ -9,6 +9,7 @@ from modules.dummies import generate_dummypage
 from modules.database import *
 from modules.dummies import *
 from modules.constants import *
+from database.likes import *
 
 app = Flask(__name__, template_folder='templates')
 CURRENT_ADDRESS = "http://127.0.0.1:5000/"
@@ -60,6 +61,9 @@ def show_feed(page=1):
             if session['admin'] >= 1 or session['id'] == author_id:
                 delete_post_bID(id, create_connection(DATABASE_PATH), UPLOAD_FOLDER)
                 return redirect(url_for('show_feed'))
+        if 'like' in request.form.keys():
+            id = request.form['id']
+            import_history()
     if request.method == "GET" and request.args.get('page'):
         page = int(request.args.get('page'))
     dataposts = list(get_all_tabledata(create_connection(DATABASE_PATH), 'Post'))
@@ -125,9 +129,11 @@ def generate_posts(dataposts, page, limit):
     for i in range((page - 1) * PAGES_POSTS, limit):
         author_name = get_username_bId(dataposts[i][1], DATABASE_PATH)
         avatar = get_user_avatar_bId(dataposts[i][1], DATABASE_PATH)
-        post = {'avatar': AVATAR_FOLDER + avatar, 'author_id': dataposts[i][1],
+        reactions = list(get_reaction_bId(dataposts[i][0], DATABASE_PATH))
+        post = {'id': dataposts[i][0], 'avatar': AVATAR_FOLDER + avatar, 'author_id': dataposts[i][1],
                 'author_name': author_name, 'date': dataposts[i][4], 'comment': dataposts[i][2],
-                'image': MEMES_FOLDER + dataposts[i][3], 'id': dataposts[i][0]}
+                'image': MEMES_FOLDER + dataposts[i][3], 'likes': reactions[0][0], 'dislikes': reactions[0][1]
+                }
         posts.append(post)
     return posts
 
@@ -146,7 +152,7 @@ def page_notexist(e):
     return render_template('404.html')
 
 @app.errorhandler(403)
-def page_access_denided(e):
+def page_access_denied(e):
     return render_template('403.html')
 
 @app.errorhandler(500)
@@ -154,7 +160,7 @@ def internal_server_error(e):
     return render_template('500.html')
 
 @app.errorhandler(400)
-def bad_reuest(e):
+def bad_request(e):
     return render_template('400.html')
 
 
@@ -163,7 +169,6 @@ def bad_reuest(e):
 @app.route("/register", methods=['POST', 'GET'])
 @app.route("/signup", methods=['POST', 'GET'])
 def register_user():
-    log_out()
     if 'login' in session:
         return redirect(url_for('show_feed'))
     if request.method == 'POST':
@@ -173,6 +178,7 @@ def register_user():
         file = ''
         if 'avatar' in request.files:
             file = request.files['avatar']
+        filename = 'ava.jpg'
         path = ''
         if file == '':
             path = DEFAULT_AVATAR
@@ -182,6 +188,7 @@ def register_user():
             file.save(path)
         con = sl.connect(DATABASE_PATH)
         email = f"user_email_{login}{path[len(path) - 4:]}@mail.ru"
+        print(filename)
         val = add_data(connection=con, tablename='users', dataclass_element=User(0, 0, login, password, filename, email),
                        individual_fields=USERS_INDIVIDUAL_FIELDS)
         res = list(con.execute(f"SELECT id,admin FROM Users WHERE login='{login}'"))[0]

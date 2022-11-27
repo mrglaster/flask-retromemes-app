@@ -1,4 +1,6 @@
 <form action="" method="POST" id="delete"><input type="hidden" name="delete"></form>
+<form action="" method="POST" id="like"><input type="hidden" name="like"></form>
+<form action="" method="POST" id="dislike"><input type="hidden" name="dislike"></form>
 {% for post in posts %}
 <div class="post">
     <div class="avatar">
@@ -16,13 +18,13 @@
         <div><img src="{{ url_for('static', filename=post['image']) }}" alt="meme"></div>
     </div>
     <div class="reaction">
-        <div>
+        <div onclick="addId({{ post['id'] }}, 'like')">
             <div></div>
-            <div>1</div>
+            <div>{{ post['likes'] }}</div>
         </div>
-        <div>
+        <div onclick="addId({{ post['id'] }}, 'like')">
             <div></div>
-            <div>95</div>
+            <div>{{ post['dislikes'] }}</div>
         </div>
     </div>
 </div>
