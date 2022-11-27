@@ -68,6 +68,20 @@ def show_feed(page=1):
     return render_template("index.html", posts=posts, pages=pages)
 
 
+def process_useraction(action, nickname):
+    if action == 'Delete':
+        delete_user(create_connection(DATABASE_PATH), nickname)
+    elif action == 'Make admin':
+        make_admin(create_connection(DATABASE_PATH), nickname)
+    elif action == 'Make moderator':
+        make_moderator(create_connection(DATABASE_PATH), nickname)
+    elif action == 'Make user':
+        make_user(create_connection(DATABASE_PATH), nickname)
+    elif action == 'Ban':
+        ban_user()
+    else:
+        return render_template('500.html')
+
 @app.route('/admin', methods=['GET', 'POST'])
 @app.route('/adminpannel', methods=['GET', 'POST'])
 @app.route('/adminpanel', methods=['GET', 'POST'])
@@ -86,19 +100,8 @@ def admin_panel():
         else:
             action = request.form['action']
             nickname = request.form['nickname']
-            match action:
-                # case "Ban":
-                    # ban_user()
-                case "Delete":
-                    delete_user(create_connection(DATABASE_PATH), nickname)
-                # case "Unban":
-                    # unban_user()
-                case "Make admin":
-                    make_admin(create_connection(DATABASE_PATH), nickname)
-                case "Make moderator":
-                    make_moderator(create_connection(DATABASE_PATH), nickname)
-                case "Make user":
-                    make_user(create_connection(DATABASE_PATH), nickname)
+            process_useraction(action, nickname)
+
     dataposts = list(get_author_posts(create_connection(DATABASE_PATH), userid))
     pages, limit = calc_pages_and_limit(dataposts, page)
     posts = generate_posts(dataposts, page, limit)
