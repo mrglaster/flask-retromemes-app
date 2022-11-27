@@ -103,7 +103,9 @@ def admin_panel():
     pages, limit = calc_pages_and_limit(dataposts, page)
     posts = generate_posts(dataposts, page, limit)
     avatar = 'images/avatars/' + get_user_avatar_bId(userid, DATABASE_PATH)
-    return render_template('admin.html', posts=posts, pages=pages, avatar=avatar)
+    userdata = {'id': userid, 'login': get_username_bId(userid, DATABASE_PATH),
+                'admin': int(list(get_admin_status_bId(userid, DATABASE_PATH))[0][0])}
+    return render_template('admin.html', posts=posts, pages=pages, avatar=avatar, userdata=userdata)
 
 def check_login():
     if 'login' not in session:

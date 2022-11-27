@@ -226,6 +226,12 @@ def get_authorid_by_post(connection, post_id):
         data = connection.execute(f'SELECT author_id FROM Post WHERE id={post_id}')
     return data
 
+def get_admin_status_bId(user_id, db_file):
+    connection = create_connection(db_file)
+    with connection:
+        data = connection.execute(f'SELECT admin FROM Users WHERE id={user_id}')
+    return data
+
 def get_userid_byname(user_name, db_file):
     """Gets user's id by it's username"""
     connection = create_connection(db_file)

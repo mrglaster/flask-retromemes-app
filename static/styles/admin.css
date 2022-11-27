@@ -23,7 +23,7 @@ main {
     padding-bottom: 30px;
 }
 
-main > div:nth-of-type(2) {
+.userdata {
     grid-column: 1/12;
     margin: 30px;
     display: grid;
@@ -56,8 +56,6 @@ main > div:nth-of-type(2) {
 
 .name > div:nth-child(2) {
     grid-column: 2/6;
-    background: #e20000;
-    border-color: #af0000;
     width: 80px;
     height: 20px;
     padding: 5px;
@@ -65,6 +63,21 @@ main > div:nth-of-type(2) {
     color: #fff;
     font-weight: bold;
     border-radius: 4px;
+}
+
+#admin {
+    background: #e20000;
+    border-color: #af0000;
+}
+
+#moderator {
+    background-color: #0b6dc9;
+    border-color: #0e64b4
+}
+
+#user {
+    background-color: #5ea4c5;
+    border-color: #4f8fad
 }
 
 .exit {
