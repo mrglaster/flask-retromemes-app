@@ -1,5 +1,7 @@
 import sqlite3
 import sqlite3 as sl
+from modules.database import get_newestId, create_connection
+from modules.constants import *
 
 users = ['id', 'admin', 'login', 'password', 'avatar']
 post = ['id', 'author_id', 'text', 'image', 'date', 'like', 'dislike']
@@ -126,9 +128,10 @@ def import_rates(post_id, history_id):
                 DB.executemany(sql,data)
 
 
-def import_history(history_id, post_id, user_id, action):
+def import_history(post_id, user_id, action):
     DB = sl.connect('memes.db') #path to db
     last_action = give_last_action(post_id, user_id)
+    history_id = get_newestId(create_connection(DATABASE_PATH), 'History')
     sql = 'INSERT INTO history(id, post_id, user_id, action) values(?,?,?,?)'
     if action == last_action:
         data = [

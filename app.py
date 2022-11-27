@@ -29,7 +29,8 @@ def allowed_file(filename):
 @app.route("/uploads", methods=['GET', 'POST'])
 @app.route("/upload", methods=['GET', 'POST'])
 def upload_meme():
-    check_login()
+    if 'login' not in session:
+        return redirect(url_for('login_user'))
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' in request.files:
@@ -53,7 +54,8 @@ def upload_meme():
 @app.route("/index", methods=['GET', 'POST'])
 @app.route("/main", methods=['GET', 'POST'])
 def show_feed(page=1):
-    check_login()
+    if 'login' not in session:
+        return redirect(url_for('login_user'))
     if request.method == "POST":
         if 'delete' in request.form.keys():
             id = request.form['id']
@@ -63,7 +65,7 @@ def show_feed(page=1):
                 return redirect(url_for('show_feed'))
         if 'like' in request.form.keys():
             id = request.form['id']
-            import_history()
+            # import_history(id, session['id'], 1)
     if request.method == "GET" and request.args.get('page'):
         page = int(request.args.get('page'))
     dataposts = list(get_all_tabledata(create_connection(DATABASE_PATH), 'Post'))
@@ -90,10 +92,11 @@ def process_useraction(action, nickname):
 @app.route('/adminpannel', methods=['GET', 'POST'])
 @app.route('/adminpanel', methods=['GET', 'POST'])
 def admin_panel():
+    if 'login' not in session:
+        return redirect(url_for('login_user'))
     userid = session['id']
     if request.method == "GET" and 'id' in request.args.keys():
         userid = int(request.args['id'])
-    check_login()
     page = 1
     if request.method == "GET" and request.args.get('page'):
         page = int(request.args.get('page'))
@@ -113,10 +116,6 @@ def admin_panel():
     userdata = {'id': userid, 'login': get_username_bId(userid, DATABASE_PATH),
                 'admin': int(list(get_admin_status_bId(userid, DATABASE_PATH))[0][0])}
     return render_template('admin.html', posts=posts, pages=pages, avatar=avatar, userdata=userdata)
-
-def check_login():
-    if 'login' not in session:
-        return redirect(url_for('login_user'))
 
 def log_out():
     keys = list(session.keys())[:]
