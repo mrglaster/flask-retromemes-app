@@ -84,3 +84,15 @@ User roles can be divided into 3 groups. The first and most numerous are ordinar
 
 ![alt image](https://github.com/mrglaster/flask-retromemes-app/blob/main/static/images/error_images/403-image.png)
 
+
+### Developed by
+
+1) [Vadim Nechaev](https://github.com/nech14)
+2) [Vladislav Novikov](https://github.com/vladnov138)
+3) [Egor Pristavka](https://github.com/mrglaster/)
+
+### Links
+
+1) https://flask.palletsprojects.com/en/2.2.x/
+2) https://vk.com/whenangelsrise (https://vk.com/whenangelsrise?z=photo-162910245_456239052%2Fwall-162910245_34)
+3) https://images7.memedroid.com/images/UPLOADED903/6056582719c9c.jpeg
