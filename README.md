@@ -2,6 +2,8 @@
 
 this site was created as a study assignment for Irkutsk State University (ISU). On assignment, we had to create a website with memes. It should support uploading new memes, viewing those already uploaded as a feed, authorizing and registering new users, and also allow users to rate posts with "like" or "dislike" 
 
+```THIS VERSION IS LINUX ONLY```
+
 ## How to run this application?
 
 1) Install ```Python 3.x```
@@ -13,6 +15,7 @@ or
 ```
 pip install Flask==1.1.4
 pip install Werkzeug==1.0.1
+pip install bcrypt
 ```
 4) Change dir to the project's directory 
 5) Run project with ```flask run```
