@@ -169,7 +169,7 @@ def bad_request(e):
 @app.route("/signup", methods=['POST', 'GET'])
 def register_user():
     if 'login' in session:
-        return redirect(url_for('show_feed'))
+        return redirect(url_for('welcome_page'))
     if request.method == 'POST':
         login = request.form['login']
         password = request.form['password']
@@ -190,6 +190,8 @@ def register_user():
         print(filename)
         val = add_data(connection=con, tablename='users', dataclass_element=User(0, 0, login, password, filename, email),
                        individual_fields=USERS_INDIVIDUAL_FIELDS)
+        if val == 100:
+            return render_template('cant_register.html')
         res = list(con.execute(f"SELECT id,admin FROM Users WHERE login='{login}'"))[0]
         session['id'] = res[0]
         session['login'] = login
@@ -204,18 +206,20 @@ def register_user():
 @app.route("/authorize", methods=['POST', 'GET'])
 def login_user():
     if 'login' in session:
-        return redirect(url_for('show_feed'))
+        return redirect(url_for('welcome_page'))
     if request.method == 'POST':
         login = request.form.get('login')
         password = request.form.get('password')
         con = sl.connect(DATABASE_PATH)
         sql = f"SELECT password,id, admin FROM users WHERE `login`='{login}'"
         result = list(con.execute(sql))
+        if len(result) == 0:
+            return render_template("cant_login.html")
         if password == result[0][0]:
             session['login'] = login
             session['id'] = result[0][1]
             session['admin'] = result[0][2]
-        redirect('show_feed')
+        redirect(url_for('welcome_page'))
     return render_template('auth.html')
 
 
