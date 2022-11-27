@@ -137,10 +137,23 @@ def calc_pages_and_limit(dataposts, page):
         limit = len(dataposts)
     return pages, limit
 
-# Handling of 404 error
+
 @app.errorhandler(404)
 def page_notexist(e):
     return render_template('404.html')
+
+@app.errorhandler(403)
+def page_access_denided(e):
+    return render_template('403.html')
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html')
+
+@app.errorhandler(400)
+def bad_reuest(e):
+    return render_template('400.html')
+
 
 
 # Register page
