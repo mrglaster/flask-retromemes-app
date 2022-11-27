@@ -9,7 +9,7 @@ from modules.dummies import generate_dummypage
 from modules.database import *
 from modules.dummies import *
 from modules.constants import *
-from database.likes import *
+from modules.likes import *
 
 app = Flask(__name__, template_folder='templates')
 CURRENT_ADDRESS = "http://127.0.0.1:5000/"
