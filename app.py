@@ -10,7 +10,6 @@ from modules.database import *
 from modules.dummies import *
 from modules.constants import *
 from modules.likes import *
-import bcrypt
 
 app = Flask(__name__, template_folder='templates')
 CURRENT_ADDRESS = "http://127.0.0.1:5000/"
@@ -43,7 +42,7 @@ def upload_meme():
             username = session['login']
             file = request.files['file']
             if file.filename != '' and allowed_file(file.filename):
-                filename = str(date.today()) + "_time_" + str(time.time()) + '.' + file.filename.rsplit('.', 1)[-1]
+                filename = str(date.today()) + "_time_" + str(time.time()) + file.filename.rsplit('.', 1)[-1]
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 connection = create_connection(DATABASE_PATH)
                 add_data(connection=connection, tablename='post',
@@ -51,8 +50,7 @@ def upload_meme():
                                                 text=request.form.get('comment'), image=filename,
                                                 date=str(date.today()), like=0, dislike=0))
         return redirect(url_for('show_feed'))
-    avatar = 'images/avatars/' + get_user_avatar_bId(session['id'], DATABASE_PATH)
-    return render_template('upload.html', avatar=avatar)
+    return render_template('upload.html')
 
 
 # The feed page
@@ -85,7 +83,7 @@ def show_feed(page=1):
         page = int(request.args.get('page'))
     dataposts = list(get_all_tabledata(create_connection(DATABASE_PATH), 'Post'))
     pages, limit = calc_pages_and_limit(dataposts, page)
-    posts = generate_posts(dataposts[::-1], page, limit)
+    posts = generate_posts(dataposts, page, limit)
     avatar = 'images/avatars/' + get_user_avatar_bId(session['id'], DATABASE_PATH)
     return render_template("index.html", posts=posts, pages=pages, avatar=avatar)
 
@@ -150,7 +148,7 @@ def user_page():
             process_useraction(action, nickname)
     dataposts = list(get_author_posts(create_connection(DATABASE_PATH), userid))
     pages, limit = calc_pages_and_limit(dataposts, page)
-    posts = generate_posts(dataposts[::-1], page, limit)
+    posts = generate_posts(dataposts, page, limit)
     avatar = 'images/avatars/' + get_user_avatar_bId(userid, DATABASE_PATH)
     userdata = {'id': userid, 'login': get_username_bId(userid, DATABASE_PATH),
                 'admin': int(list(get_admin_status_bId(userid, DATABASE_PATH))[0][0])}
@@ -181,7 +179,7 @@ def generate_posts(dataposts, page, limit):
                 'image': MEMES_FOLDER + dataposts[i][3], 'likes': reactions[0][0], 'dislikes': reactions[0][1]
                 }
         posts.append(post)
-    return posts
+    return reversed(posts)
 
 def calc_pages_and_limit(dataposts, page):
     """Returns max pages and limit for current page"""
@@ -220,7 +218,7 @@ def register_user():
         return render_template("welcome_page.html")
     if request.method == 'POST':
         login = request.form['login']
-        password = bcrypt.hashpw(request.form['password'].encode(), bcrypt.gensalt())
+        password = request.form['password']
         # email = request.form['email']
         file = ''
         if 'avatar' in request.files:
@@ -257,14 +255,13 @@ def login_user():
         return render_template('welcome_page.html')
     if request.method == 'POST':
         login = request.form.get('login')
-        password = request.form.get('password').encode()
+        password = request.form.get('password')
         con = sl.connect(DATABASE_PATH)
         sql = f"SELECT password,id, admin FROM users WHERE `login`='{login}'"
         result = list(con.execute(sql))
         if len(result) == 0 or password != result[0][0]:
             return render_template("cant_login.html")
-        print(result[0][0])
-        if bcrypt.checkpw(password, result[0][0]):
+        if password == result[0][0]:
             session['login'] = login
             session['id'] = result[0][1]
             session['admin'] = result[0][2]
@@ -273,5 +270,5 @@ def login_user():
 
 
 # Programm run
-#if __name__ == '__main__':
-#    app.run(host="0.0.0.0", debug=True)
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", debug=True)
