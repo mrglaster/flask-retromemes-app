@@ -64,7 +64,7 @@ User roles can be divided into 3 groups. The first and most numerous are ordinar
 ![alt text](https://github.com/mrglaster/flask-retromemes-app/blob/main/readme_images/admin.png)
 
 
-## Web pages for errors (500, 404 etc)
+## Custom pages for errors (500, 404, etc)
 
 ### Error 500
 
