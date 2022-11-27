@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <link rel="stylesheet" href="{{url_for('static', filename='styles/welcome.css')}}">
+        <title>Authorization Error!</title>
+    </head>
+    <body>
+        <div class="text-container red-text">
+            <h2> Authorization error!</h2>
+            <h2>Wrong login or password!</h2>
+        </div>
+        <script src="{{url_for('static', filename='scripts/redirect_login.js')}}"></script>
+    </body>
+    
+</html>

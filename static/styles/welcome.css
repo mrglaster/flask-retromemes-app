@@ -1,0 +1,27 @@
+ body{
+    background-color: #74DAEB;
+}
+         
+         
+.text-container{
+    background-color: #fff;
+    position: absolute;
+    width: 30%;
+    height: 20%;
+    box-shadow: -1px 0px 10px 12px rgba(34, 60, 80, 0.2);
+    border-radius: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    top: 28%;
+    left: 33%;
+    text-align: center;        
+}
+
+.text-container h2{
+   font-family: Calibri;
+   padding-top: 20px;
+} 
+
+.red-text{
+    color: red;
+}
