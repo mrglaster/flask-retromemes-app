@@ -63,9 +63,12 @@ def show_feed(page=1):
             if session['admin'] >= 1 or session['id'] == author_id:
                 delete_post_bID(id, create_connection(DATABASE_PATH), UPLOAD_FOLDER)
                 return redirect(url_for('show_feed'))
+        if 'dislike' in request.form.keys():
+            id = request.form['id']
+            import_history(id, session['id'], 2)
         if 'like' in request.form.keys():
             id = request.form['id']
-            # import_history(id, session['id'], 1)
+            import_history(id, session['id'], 1)
     if request.method == "GET" and request.args.get('page'):
         page = int(request.args.get('page'))
     dataposts = list(get_all_tabledata(create_connection(DATABASE_PATH), 'Post'))

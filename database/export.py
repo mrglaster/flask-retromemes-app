@@ -10,6 +10,8 @@ DB = [users, post, rates]
 
 con = sl.connect('memes.db')
 with con:
+    print(list(con.execute("SELECT name FROM sqlite_master WHERE type='table';")))
+    print(list(con.execute("SELECT * FROM rates")))
     data = con.execute('SELECT * FROM Post')
     for row in data:
         print(row)
