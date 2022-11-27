@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        .bg_div{
+             background-size: 100% 100%;
+             background-image: url({{url_for('static', filename='images/error_images/notadmin-image.png')}});
+             position: absolute;
+             top: 0px;
+             right: 0px;
+             bottom: 0px;
+             left: 0px;
+        }
+        @media only screen and (max-width: 600px) {
+            body {
+                top: -100px;
+            }
+        }
+    </style>
+    <head>
+        <title>Nope!</title>
+    </head>
+
+    <body>
+       <div class="bg_div">
+       </div>
+    </body>
+</html>
