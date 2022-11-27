@@ -28,6 +28,8 @@ def allowed_file(filename):
 # The page for meme uploading
 @app.route("/uploads", methods=['GET', 'POST'])
 @app.route("/upload", methods=['GET', 'POST'])
+@app.route("/post", methods=['GET', 'POST'])
+@app.route("/new", methods=['GET', 'POST'])
 def upload_meme():
     if 'login' not in session:
         return redirect(url_for('login_user'))
@@ -88,10 +90,30 @@ def process_useraction(action, nickname):
     else:
         return render_template('500.html')
 
+
 @app.route('/admin', methods=['GET', 'POST'])
 @app.route('/adminpannel', methods=['GET', 'POST'])
 @app.route('/adminpanel', methods=['GET', 'POST'])
-def admin_panel():
+@app.route('/moderator', methods=['GET', 'POST'])
+@app.route('/moder', methods=['GET', 'POST'])
+def admin_page():
+    if 'login' not in session:
+        return redirect(url_for('login_user'))
+    userid = session['id']
+    if request.method == "GET" and 'id' in request.args.keys():
+        userid = int(request.args['id'])
+    if int(list(get_admin_status_bId(userid, DATABASE_PATH))[0][0]) == 0:
+        randomizer = random.randint(1,3)
+        if randomizer == 1:
+            return render_template("notadmin_page.html")
+        return render_template("403.html")
+    return redirect(url_for('user_page'))
+    
+
+@app.route('/me', methods=['GET', 'POST'])
+@app.route('/userpage', methods=['GET', 'POST'])
+@app.route('/user', methods=['GET', 'POST'])
+def user_page():
     if 'login' not in session:
         return redirect(url_for('login_user'))
     userid = session['id']
@@ -108,14 +130,13 @@ def admin_panel():
             action = request.form['action']
             nickname = request.form['nickname']
             process_useraction(action, nickname)
-
     dataposts = list(get_author_posts(create_connection(DATABASE_PATH), userid))
     pages, limit = calc_pages_and_limit(dataposts, page)
     posts = generate_posts(dataposts, page, limit)
     avatar = 'images/avatars/' + get_user_avatar_bId(userid, DATABASE_PATH)
     userdata = {'id': userid, 'login': get_username_bId(userid, DATABASE_PATH),
                 'admin': int(list(get_admin_status_bId(userid, DATABASE_PATH))[0][0])}
-    return render_template('admin.html', posts=posts, pages=pages, avatar=avatar, userdata=userdata)
+    return render_template('userpage.html', posts=posts, pages=pages, avatar=avatar, userdata=userdata)
 
 def log_out():
     keys = list(session.keys())[:]
@@ -134,7 +155,7 @@ def generate_posts(dataposts, page, limit):
                 'image': MEMES_FOLDER + dataposts[i][3], 'likes': reactions[0][0], 'dislikes': reactions[0][1]
                 }
         posts.append(post)
-    return posts
+    return reversed(posts)
 
 def calc_pages_and_limit(dataposts, page):
     pages = len(dataposts) // PAGES_POSTS
