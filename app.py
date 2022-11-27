@@ -169,7 +169,7 @@ def bad_request(e):
 @app.route("/signup", methods=['POST', 'GET'])
 def register_user():
     if 'login' in session:
-        return redirect(url_for('welcome_page'))
+        return render_template("welcome_page.html")
     if request.method == 'POST':
         login = request.form['login']
         password = request.form['password']
@@ -206,7 +206,7 @@ def register_user():
 @app.route("/authorize", methods=['POST', 'GET'])
 def login_user():
     if 'login' in session:
-        return redirect(url_for('welcome_page'))
+        return render_template('welcome_page.html')
     if request.method == 'POST':
         login = request.form.get('login')
         password = request.form.get('password')
@@ -219,7 +219,7 @@ def login_user():
             session['login'] = login
             session['id'] = result[0][1]
             session['admin'] = result[0][2]
-        redirect(url_for('welcome_page'))
+        return renter_template("welcome_page.html")
     return render_template('auth.html')
 
 
