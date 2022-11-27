@@ -4,6 +4,8 @@ this site was created as a study assignment for Irkutsk State University (ISU). 
 
 ```THIS VERSION IS LINUX ONLY```
 
+If you need version for windows check the [windows-edition](https://github.com/mrglaster/flask-retromemes-app/tree/windows-edition)
+
 ## How to run this application?
 
 1) Install ```Python 3.x```
