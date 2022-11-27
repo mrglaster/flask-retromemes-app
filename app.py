@@ -35,7 +35,7 @@ def upload_meme():
             username = session['login']
             file = request.files['file']
             if file.filename != '' and allowed_file(file.filename):
-                filename = str(date.today()) + "_time_" + str(time.time()) + file.filename.split[-1]
+                filename = str(date.today()) + "_time_" + str(time.time()) + file.filename.rsplit('.', 1)[-1]
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 connection = create_connection(DATABASE_PATH)
                 add_data(connection=connection, tablename='post',
@@ -53,6 +53,13 @@ def upload_meme():
 @app.route("/main", methods=['GET', 'POST'])
 def show_feed(page=1):
     check_login()
+    if request.method == "POST":
+        if 'delete' in request.form.keys():
+            id = request.form['id']
+            author_id = list(get_authorid_by_post(create_connection(DATABASE_PATH), id))[0][0]
+            if session['admin'] >= 1 or session['id'] == author_id:
+                delete_post_bID(id, create_connection(DATABASE_PATH), UPLOAD_FOLDER)
+                return redirect(url_for('show_feed'))
     if request.method == "GET" and request.args.get('page'):
         page = int(request.args.get('page'))
     dataposts = list(get_all_tabledata(create_connection(DATABASE_PATH), 'Post'))
@@ -65,6 +72,9 @@ def show_feed(page=1):
 @app.route('/adminpannel', methods=['GET', 'POST'])
 @app.route('/adminpanel', methods=['GET', 'POST'])
 def admin_panel():
+    userid = session['id']
+    if request.method == "GET" and 'id' in request.args.keys():
+        userid = int(request.args['id'])
     check_login()
     page = 1
     if request.method == "GET" and request.args.get('page'):
@@ -89,10 +99,10 @@ def admin_panel():
                     make_moderator(create_connection(DATABASE_PATH), nickname)
                 case "Make user":
                     make_user(create_connection(DATABASE_PATH), nickname)
-    dataposts = list(get_author_posts(create_connection(DATABASE_PATH), session['id']))
+    dataposts = list(get_author_posts(create_connection(DATABASE_PATH), userid))
     pages, limit = calc_pages_and_limit(dataposts, page)
     posts = generate_posts(dataposts, page, limit)
-    avatar = 'images/avatars/' + get_user_avatar_bId(session['id'], DATABASE_PATH)
+    avatar = 'images/avatars/' + get_user_avatar_bId(userid, DATABASE_PATH)
     return render_template('admin.html', posts=posts, pages=pages, avatar=avatar)
 
 def check_login():
@@ -108,13 +118,11 @@ def generate_posts(dataposts, page, limit):
     posts = []
     # Generate posts
     for i in range((page - 1) * PAGES_POSTS, limit):
-        author_name = get_username_bId(dataposts[i][1], 'C:\\Users\\79246\\PycharmProjects\\flask-retromemes-app\\'
-                                                        'database\\memes_testdata.db')
-        avatar = get_user_avatar_bId(dataposts[i][1], 'C:\\Users\\79246\\PycharmProjects\\flask-retromemes-app\\'
-                                                      'database\\memes_testdata.db')
+        author_name = get_username_bId(dataposts[i][1], DATABASE_PATH)
+        avatar = get_user_avatar_bId(dataposts[i][1], DATABASE_PATH)
         post = {'avatar': AVATAR_FOLDER + avatar, 'author_id': dataposts[i][1],
                 'author_name': author_name, 'date': dataposts[i][4], 'comment': dataposts[i][2],
-                'image': MEMES_FOLDER + dataposts[i][3], }
+                'image': MEMES_FOLDER + dataposts[i][3], 'id': dataposts[i][0]}
         posts.append(post)
     return posts
 

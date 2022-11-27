@@ -14,11 +14,9 @@
     {% include "nav.html" %}
     {% block content %}
     <main>
-        {% for post in posts %}
         {% include "post.html" %}
-        {% endfor %}
-        
     </main>
     {% endblock %}
+    <script src="{{ url_for('static', filename='scripts/delete.js') }}"></script>
 </body>
 </html>

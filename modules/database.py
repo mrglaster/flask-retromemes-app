@@ -221,6 +221,11 @@ def print_database(database_file):
         print_table(con, i)
 
 
+def get_authorid_by_post(connection, post_id):
+    with connection:
+        data = connection.execute(f'SELECT author_id FROM Post WHERE id={post_id}')
+    return data
+
 def get_userid_byname(user_name, db_file):
     """Gets user's id by it's username"""
     connection = create_connection(db_file)
