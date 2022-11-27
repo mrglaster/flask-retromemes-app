@@ -3,6 +3,6 @@
     <a href="feed"><div>Feed</div></a>
     <a href="upload"><div>Post</div></a>
     <a href="me"><div>My memes</div></a>
-    <a href="me"><div><img src="../static/images/ava.jpg" alt="ava"></div></a>
+    <a href="me"><div><img src="{{ url_for('static', filename=avatar) }}" alt="ava"></div></a>
 </nav>
 {% endblock %}

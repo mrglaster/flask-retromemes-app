@@ -33,6 +33,9 @@ def allowed_file(filename):
 def upload_meme():
     if 'login' not in session:
         return redirect(url_for('login_user'))
+    if not is_user_active():
+        log_out()
+        return redirect(url_for('login_user'))
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' in request.files:
@@ -58,6 +61,9 @@ def upload_meme():
 def show_feed(page=1):
     if 'login' not in session:
         return redirect(url_for('login_user'))
+    if not is_user_active():
+        log_out()
+        return redirect(url_for('login_user'))
     if request.method == "POST":
         if 'delete' in request.form.keys():
             id = request.form['id']
@@ -65,6 +71,8 @@ def show_feed(page=1):
             if session['admin'] >= 1 or session['id'] == author_id:
                 delete_post_bID(id, create_connection(DATABASE_PATH), UPLOAD_FOLDER)
                 return redirect(url_for('show_feed'))
+            else:
+                return render_template("403.html")
         if 'dislike' in request.form.keys():
             id = request.form['id']
             import_history(id, session['id'], 2)
@@ -76,7 +84,8 @@ def show_feed(page=1):
     dataposts = list(get_all_tabledata(create_connection(DATABASE_PATH), 'Post'))
     pages, limit = calc_pages_and_limit(dataposts, page)
     posts = generate_posts(dataposts, page, limit)
-    return render_template("index.html", posts=posts, pages=pages)
+    avatar = 'images/avatars/' + get_user_avatar_bId(session['id'], DATABASE_PATH)
+    return render_template("index.html", posts=posts, pages=pages, avatar=avatar)
 
 
 def process_useraction(action, nickname):
@@ -102,10 +111,10 @@ def process_useraction(action, nickname):
 def admin_page():
     if 'login' not in session:
         return redirect(url_for('login_user'))
-    userid = session['id']
-    if request.method == "GET" and 'id' in request.args.keys():
-        userid = int(request.args['id'])
-    if int(list(get_admin_status_bId(userid, DATABASE_PATH))[0][0]) == 0:
+    if not is_user_active():
+        log_out()
+        return redirect(url_for('login_user'))
+    if int(list(get_admin_status_bId(session['id'], DATABASE_PATH))[0][0]) == 0:
         randomizer = random.randint(1,3)
         if randomizer == 1:
             return render_template("notadmin_page.html")
@@ -119,12 +128,16 @@ def admin_page():
 def user_page():
     if 'login' not in session:
         return redirect(url_for('login_user'))
+    if not is_user_active():
+        log_out()
+        return redirect(url_for('login_user'))
     userid = session['id']
-    if request.method == "GET" and 'id' in request.args.keys():
-        userid = int(request.args['id'])
     page = 1
-    if request.method == "GET" and request.args.get('page'):
-        page = int(request.args.get('page'))
+    if request.method == "GET":
+        if 'id' in request.args.keys():
+            userid = int(request.args['id'])
+        elif request.args.get('page'):
+            page = int(request.args.get('page'))
     if request.method == 'POST':
         if 'exit' in request.form.keys():
             log_out()
@@ -141,12 +154,20 @@ def user_page():
                 'admin': int(list(get_admin_status_bId(userid, DATABASE_PATH))[0][0])}
     return render_template('userpage.html', posts=posts, pages=pages, avatar=avatar, userdata=userdata)
 
+def is_user_active():
+    """Check if user exists in database"""
+    con = create_connection(DATABASE_PATH)
+    res = con.execute(f"SELECT id,login FROM Users WHERE id={session['id']} and login='{session['login']}'")
+    return len(list(res)) == 1
+
 def log_out():
+    """Clear a user session"""
     keys = list(session.keys())[:]
     for key in keys:
         session.pop(key)
 
 def generate_posts(dataposts, page, limit):
+    """Returns array of dictionaries for posts"""
     posts = []
     # Generate posts
     for i in range((page - 1) * PAGES_POSTS, limit):
@@ -161,6 +182,7 @@ def generate_posts(dataposts, page, limit):
     return reversed(posts)
 
 def calc_pages_and_limit(dataposts, page):
+    """Returns max pages and limit for current page"""
     pages = len(dataposts) // PAGES_POSTS
     if len(dataposts) % PAGES_POSTS != 0:
         pages += 1
