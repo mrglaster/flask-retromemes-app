@@ -2,12 +2,14 @@
 
 <html>
     <head>
-        <link href=href= "{{ url_for('static',filename='styles/404_page.css') }}" type="text/css" rel="stylesheet"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/nav.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/nav-mobile.css') }}">
+        <link href="{{ url_for('static',filename='styles/404_page.css') }}" type="text/css" rel="stylesheet"/>
         <title>Ooops, this page doesn't exist</title>
     </head>
-
     <body>
-        <a href="http://127.0.0.1:5000/feed"><div class="centered"><img src="{{url_for('static', filename='images/error_images/404-image.png')}}"/></div></a>
+        {% include "nav.html" %}
+        <a href="http://127.0.0.1:5000/feed"><div class="centered"></div></a>
 
     </body>
 </html>
