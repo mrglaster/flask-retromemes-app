@@ -83,7 +83,7 @@ def show_feed(page=1):
         page = int(request.args.get('page'))
     dataposts = list(get_all_tabledata(create_connection(DATABASE_PATH), 'Post'))
     pages, limit = calc_pages_and_limit(dataposts, page)
-    posts = generate_posts(dataposts, page, limit)
+    posts = generate_posts(dataposts[::-1], page, limit)
     avatar = 'images/avatars/' + get_user_avatar_bId(session['id'], DATABASE_PATH)
     return render_template("index.html", posts=posts, pages=pages, avatar=avatar)
 
@@ -148,7 +148,7 @@ def user_page():
             process_useraction(action, nickname)
     dataposts = list(get_author_posts(create_connection(DATABASE_PATH), userid))
     pages, limit = calc_pages_and_limit(dataposts, page)
-    posts = generate_posts(dataposts, page, limit)
+    posts = generate_posts(dataposts[::-1], page, limit)
     avatar = 'images/avatars/' + get_user_avatar_bId(userid, DATABASE_PATH)
     userdata = {'id': userid, 'login': get_username_bId(userid, DATABASE_PATH),
                 'admin': int(list(get_admin_status_bId(userid, DATABASE_PATH))[0][0])}
@@ -179,7 +179,7 @@ def generate_posts(dataposts, page, limit):
                 'image': MEMES_FOLDER + dataposts[i][3], 'likes': reactions[0][0], 'dislikes': reactions[0][1]
                 }
         posts.append(post)
-    return reversed(posts)
+    return posts
 
 def calc_pages_and_limit(dataposts, page):
     """Returns max pages and limit for current page"""
