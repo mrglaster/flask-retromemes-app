@@ -33,11 +33,12 @@ ListenStream=/run/flask-retromemes-app.sock * WORKING DIRECTORY*
 
 [Install]
 WantedBy=sockets.target
+```
 4. systemctl start flask-retromemes-app.socket
 5. systemctl enable flask-retromemes-app.socket
 A .sock file will appear.
 6. nano /etc/systemd/system/flask-retromemes-app.service
-
+```
 [unit]
 Description=flask-retromemes-app.service 
 Requirements=flask-retromemes-app.socket
