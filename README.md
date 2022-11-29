@@ -6,7 +6,7 @@ this site was created as a study assignment for Irkutsk State University (ISU). 
 
 If you need version for windows check the [windows-edition](https://github.com/mrglaster/flask-retromemes-app/tree/windows-edition)
 
-## How to run this application?
+## How to setup this application with nginx and run?
 
 1) Install ```Python 3.x```
 2) Download the project
@@ -19,10 +19,46 @@ pip install Flask==1.1.4
 pip install Werkzeug==1.0.1
 pip install bcrypt
 ```
-4) Change dir to the project's directory 
-5) Run project with ```flask run```
-6) Profit!
 
+4) Download gunicorn ```pip install gunicorn```
+5) Create ```wsgi.py```, import the application there and paste the fragment with the application launch (ore use one from preository)
+6) Execute command ```sudo nano /etc/systemd/system/flask-retromemes-app.socket``` and wrtie 
+
+```
+[unit]
+Description=flask-retromemes-app socket
+
+[Socket]
+ListenStream=/run/flask-retromemes-app.sock * WORKING DIRECTORY*
+
+[Install]
+WantedBy=sockets.target
+4. systemctl start flask-retromemes-app.socket
+5. systemctl enable flask-retromemes-app.socket
+A .sock file will appear.
+6. nano /etc/systemd/system/flask-retromemes-app.service
+
+[unit]
+Description=flask-retromemes-app.service 
+Requirements=flask-retromemes-app.socket
+After=network.target
+
+[Service]
+user=user
+group=user
+WorkingDirectory=/home/user/flaskapp
+ExecStart=/usr/bin/gunicorn --workers 3 \
+--bind unix:*PATH_TO_SOCK* wsgi:app
+
+[Install]
+WantedBy=multi-user.target
+```
+
+7) In nginx, create a new site based on the default one, remove ```try files...``` in ```location``` / and insert ```proxy_pass http://unix:*PATH_TO_SOCK*``` into this block
+
+8) service flask-retromemes-app start
+
+9) Profit!
 
 ## Database structure 
 
