@@ -283,18 +283,22 @@ def is_user_admin(connection, user_data, user_data_type='id'):
     raise ValueError(f'Unable user data type: {user_data_type}, value = {user_data}')
 
 def make_admin(connection, username):
+    """Turns user by his login into admin"""
     with connection:
         connection.execute(f"UPDATE Users SET admin=2 WHERE login={username}")
 
 def make_moderator(connection, username):
+    """Turn user by his login into moderator"""
     with connection:
         connection.execute(f"UPDATE Users SET admin=1 WHERE login={username}")
 
 def make_user(connection, username):
+    """Clears user's additional permissions. User's login required"""
     with connection:
         connection.execute(f"UPDATE Users SET admin=0 WHERE login={username}")
 
 def delete_user(connection, username):
+    """Deletes user by his login"""
     with connection:
         connection.execute(f"DELETE FROM Users WHERE login={username}")
 
