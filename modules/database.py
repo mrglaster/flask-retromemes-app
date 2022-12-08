@@ -116,7 +116,6 @@ def add_data(connection, tablename, dataclass_element, individual_fields=None):
             used = is_value_used(connection=connection, table_name=tablename, column_name=field_names[i],
                                  value=data_tuple[i])
             if individual_fields[i] and used:
-                print(f"Such data was already used: {field_names[i]} =  {data_tuple[i]}")
                 return 100
     with connection:
         connection.executemany(sql_request, [data_tuple])
@@ -345,7 +344,7 @@ def create_testdata_database(db_file_path, memes_folder_path):
     print('\n', "Adding posts\n\n")
     for i in [f for f in os.listdir('.') if os.path.isfile(f)]:
         user_id = random.randint(1, 3)
-        post = Post(0, user_id, f"Hi! My name is {get_username_bId(user_id, DATABASE_PATH)} and it's my meme!", i, "01.01.1900", 0, 0)
+        post = Post(0, user_id, f"Hi! My name is {get_username_bId(user_id, DATABASE_PATH)} and it's my meme!", i, "01.09.2007", 0, 0)
         add_post(connection, post)
     print_table(connection, 'post')
     connection.commit()
